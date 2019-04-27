@@ -6,7 +6,9 @@
 
     <title>{{ config('app.name') }}</title>
 
-    <!-- Bootstrap Stylings -->
+    <!-- Stylesheets-->
+    <link rel="stylesheet" href="{{ asset('css/fonts.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/overrides.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
   </head>
   

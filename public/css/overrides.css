@@ -1,0 +1,101 @@
+.body__overlay {
+    cursor: url("../images/icons/close-20.png") 25 25, pointer;
+}
+
+.ui-icon {
+    width: 16px;
+    height: 16px;
+    background-image: url("../images/ui-icons/ui-icons_444444_256x240.png");
+}
+
+.ui-widget-content .ui-icon, .ui-widget-header .ui-icon {
+    background-image: url("../images/ui-icons/ui-icons_444444_256x240.png");
+}
+
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {
+    background-image: url("../images/ui-icons/ui-icons_555555_256x240.png");
+}
+
+.ui-button,
+.ui-button:hover .ui-icon,
+.ui-button:focus .ui-icon {
+   background-image: url("../images/ui-icons/ui-icons_555555_256x240.png");
+}
+
+
+.ui-state-active .ui-icon, .ui-button:active .ui-icon {
+    background-image: url("../images/ui-icons/ui-icons_ffffff_256x240.png");
+}
+
+.ui-state-highlight .ui-icon, .ui-button .ui-state-highlight.ui-icon {
+    background-image: url("../images/ui-icons/ui-icons_777620_256x240.png");
+}
+
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {
+    background-image: url("../images/ui-icons/ui-icons_cc0000_256x240.png");
+}
+
+.ui-button .ui-icon {
+    background-image: url("../images/ui-icons/ui-icons_777777_256x240.png");
+}
+
+.slick-loading .slick-list
+{
+    background: #fff url('../images/loaders/ajax-loader.gif') center center no-repeat;
+}
+
+.subscribe__btn input.bst__btn {
+    background-image: url("../images/icons/send.png");
+}
+
+.slider__bg--1 {
+    background: rgba(0, 0, 0, 0) url("../images/slider/bg/1.png") no-repeat scroll center;
+}
+
+.slider__bg--2 {
+    background: rgba(0, 0, 0, 0) url("../images/slider/bg/2.jpg") no-repeat scroll center;
+}
+
+.slider__bg--3 {
+    background: rgba(0, 0, 0, 0) url("../images/slider/bg/3.jpg") no-repeat scroll center;
+}
+
+.slider__bg--4 {
+    background: rgba(0, 0, 0, 0) url("../images/slider/bg/4.jpg") no-repeat scroll center;
+}
+
+.bg--1 {
+    background: rgba(0, 0, 0, 0) url("../images/bg/1.jpg") no-repeat fixed 0;
+}
+
+.bg--2 {
+    background: rgba(0, 0, 0, 0) url("../images/bg/2.jpg") no-repeat scroll center;
+}
+
+.bg--3 {
+    background: rgba(0, 0, 0, 0) url("../images/others/1.jpg") no-repeat scroll center;
+}
+
+.single-checkout-box select {
+    background: rgba(0, 0, 0, 0) url("../images/icons/select-option.png") no-repeat scroll 96% 9px;
+}
+
+.order-single-btn select {
+    background: rgba(0, 0, 0, 0) url("../images/icons/select-option.png") no-repeat scroll 83% 9px;
+}
+
+.htc__newsletter__area .subscribe__btn input.bst__btn {
+    background-image: url("../images/icons/send-2.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 29% auto;
+    position: relative;
+    text-indent: -999px;
+    z-index: 5;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .slider__bg--1 {
+        background: rgba(0, 0, 0, 0) url("../images/slider/bg/1.png") no-repeat scroll right;
+    }
+}

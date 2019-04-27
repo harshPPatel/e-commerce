@@ -11,7 +11,6 @@
 
 <!-- All css files are included here. -->
 <!-- Bootstrap fremwork main css -->
-<link rel="stylesheet" href="css/bootstrap.min.css">
 <!-- Owl Carousel main css -->
 <link rel="stylesheet" href="css/owl.carousel.min.css">
 <link rel="stylesheet" href="css/owl.theme.default.min.css">
