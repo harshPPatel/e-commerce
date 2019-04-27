@@ -1,5 +1,5 @@
 
-window._ = require('lodash');
+require('../../public/js/vendor/modernizr-2.8.3.min');
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
