@@ -28,7 +28,7 @@
             </div>
             <div class="off__contact">
                 <div class="logo">
-                    <a href="index.html">
+                    <a href="/">
                         <img src="images/logo/logo.png" alt="logo">
                     </a>
                 </div>

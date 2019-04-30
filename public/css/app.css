@@ -28433,15 +28433,32 @@ h4.offset__title {
   padding: 0 15px;
   width: 100%;
   background: transparent;
-}
-
-.login input + input {
-  margin-bottom: 20px;
   margin-top: 40px;
 }
 
-.tabs__checkbox {
+.login input[type=password] {
   margin-bottom: 20px;
+}
+
+.login input#password-confirm {
+  margin-top: 20px;
+}
+
+.login input[type=checkbox] {
+  margin-top: 5px;
+}
+
+.tabs__checkbox {
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.tabs__checkbox #remember {
+  height: 16px;
+  width: 16px;
 }
 
 .tabs__checkbox span.forget a {
@@ -28471,7 +28488,7 @@ h4.offset__title {
   text-align: center;
 }
 
-.htc__login__btn a {
+.htc__login__btn button {
   border: 1px solid #d5d5d5;
   display: inline-block;
   font-size: 20px;
@@ -28534,7 +28551,7 @@ h4.offset__title {
   font-size: 16px !important;
 }
 
-.htc__login__btn a:hover {
+.htc__login__btn button:hover {
   background: #ff4136;
   color: #fff;
   border: 1px solid #ff4136;

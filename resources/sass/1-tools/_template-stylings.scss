@@ -730,13 +730,27 @@
   padding: 0 15px;
   width: 100%;
   background: transparent;
-  + input {
+  margin-top: 40px;
+  &[type="password"] {
     margin-bottom: 20px;
-    margin-top: 40px;
+  }
+  &#password-confirm {
+    margin-top: 20px;
+  }
+  &[type="checkbox"] {
+    margin-top: 5px;
   }
 }
 
 .tabs__checkbox {
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  width: 100%;
+  #remember {
+    height: 16px;
+    width: 16px;
+  }
   span.forget a {
     float: right;
     color: #ff4136;
@@ -761,7 +775,7 @@
 }
 
 .htc__login__btn {
-  a {
+  button {
     border: 1px solid #d5d5d5;
     display: inline-block;
     font-size: 20px;
@@ -825,7 +839,7 @@
   font-size: 16px !important;
 }
 
-.htc__login__btn a:hover {
+.htc__login__btn button:hover {
   background: #ff4136;
   color: #fff;
   border: 1px solid #ff4136;

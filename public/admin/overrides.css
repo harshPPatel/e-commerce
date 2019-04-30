@@ -1,0 +1,7 @@
+select.form-control {
+    background-image: url(images/down-arrow.png);
+}
+
+.drag-indicator {
+    background-image: url(images/drag-indicator.png);
+}

@@ -97,9 +97,9 @@
 
 /***/ }),
 
-/***/ "./resources/sass/admin.scss":
+/***/ "./resources/sass/admin.sass":
 /*!***********************************!*\
-  !*** ./resources/sass/admin.scss ***!
+  !*** ./resources/sass/admin.sass ***!
   \***********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
@@ -108,9 +108,9 @@
 
 /***/ }),
 
-/***/ "./resources/sass/app.scss":
+/***/ "./resources/sass/app.sass":
 /*!*********************************!*\
-  !*** ./resources/sass/app.scss ***!
+  !*** ./resources/sass/app.sass ***!
   \*********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
@@ -121,14 +121,14 @@
 
 /***/ 0:
 /*!*****************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ./resources/sass/admin.scss ***!
+  !*** multi ./resources/js/app.js ./resources/sass/app.sass ./resources/sass/admin.sass ***!
   \*****************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! D:\xampp2\htdocs\e-commerce\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! D:\xampp2\htdocs\e-commerce\resources\sass\app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! D:\xampp2\htdocs\e-commerce\resources\sass\admin.scss */"./resources/sass/admin.scss");
+__webpack_require__(/*! D:\xampp2\htdocs\e-commerce\resources\sass\app.sass */"./resources/sass/app.sass");
+module.exports = __webpack_require__(/*! D:\xampp2\htdocs\e-commerce\resources\sass\admin.sass */"./resources/sass/admin.sass");
 
 
 /***/ })
