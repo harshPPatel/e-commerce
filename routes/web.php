@@ -11,6 +11,25 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Index Page Route
+Route::get('/', 'PagesController@index');
+
+// About Page Route
+Route::get('/about', 'PagesController@about');
+
+// Contact Us Page Route
+Route::get('/contact', 'PagesController@contact');
+
+// Authentication Routes
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+// Categories Routes
+Route::resource('/admin/categories', 'CategoriesController');
+
+// Admin Base Routes
+Route::get('/user/admin', 'HomeController@index')->name('Home');
+
+// Logout Route
+Route::get('/logout', 'Auth\LoginController@logout');
