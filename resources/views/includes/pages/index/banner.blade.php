@@ -1,3 +1,4 @@
+<!-- Banner -->
 <div class="only-banner bg__white">
     <div class="container">
         <div class="only-banner-img">
@@ -7,3 +8,4 @@
         </div>
     </div>
 </div>
+<!-- end Banner -->

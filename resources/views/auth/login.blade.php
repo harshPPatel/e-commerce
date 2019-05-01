@@ -66,6 +66,7 @@
                                         </label>
                                     </div>
 
+                                    {{-- Enable This after configuring the Mail Service Setup inside ENV file. --}}
                                     @if (Route::has('password.request'))
                                         <span class="forget">
                                             <a href="{{ route('password.request') }}">

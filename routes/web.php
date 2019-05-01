@@ -26,7 +26,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 // Categories Routes
-Route::resource('/admin/categories', 'CategoriesController');
+Route::resource('/user/admin/categories', 'CategoriesController');
 
 // Admin Base Routes
 Route::get('/user/admin', 'HomeController@index')->name('Home');

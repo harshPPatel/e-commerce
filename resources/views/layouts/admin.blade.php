@@ -7,7 +7,7 @@
     {{--@section('title', 'Welcome to T-Mart')--}}
 
     {{-- Including Head --}}
-    @include('includes.adminHead')
+    @include('admin.includes.head')
 
 </head>
 
@@ -18,17 +18,30 @@
 </p>
 <![endif]-->
 
-{{-- Navigation --}}
-{{--@include('includes.navigation')--}}
 
 <!-- Body main wrapper start -->
-<div class="wrapper fixed__footer">
+<div class="dashboard-main-wrapper">
 
-    @yield('content')
+    {{-- Navigation --}}
+    @include('admin.includes.navigation')
+    @include('admin.includes.leftNavigation')
 
-    {{-- Footer --}}
-    {{--@include('includes.footer')--}}
+    <!-- wrapper  -->
+    <div class="dashboard-wrapper">
 
+        <div class="container-fluid dashboard-content">
+
+            @yield('pageHeader')
+
+            <div class="row">
+                @yield('content')
+            </div>
+        </div>
+
+        {{-- Footer --}}
+        @include('admin.includes.footer')
+
+    </div>
 </div>
 
 {{--@yield('modals')--}}
