@@ -18,6 +18,12 @@ class SubCategory extends Model
      * @var bool Value for timestamps
      */
     public $timestamps = true;
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * Creates relation between SubCategory and Category Modal.

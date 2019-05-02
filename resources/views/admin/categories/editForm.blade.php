@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-12">
             <p class="text-right">
-                <button type="submit" class="btn btn-space btn-primary">Add</button>
+                <button type="submit" class="btn btn-space btn-primary">Update</button>
                 <a role="button" class="btn btn-space btn-secondary" href="/user/admin/categories">Cancel</a>
             </p>
         </div>

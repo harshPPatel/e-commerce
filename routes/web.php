@@ -28,8 +28,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Categories Routes
 Route::resource('/user/admin/categories', 'CategoriesController');
 
+// Sub Categories Routes
+Route::resource('/user/admin/subcategories', 'SubCategoriesController');
+
 // Admin Base Routes
 Route::get('/user/admin', 'HomeController@index')->name('Home');
 
 // Logout Route
 Route::get('/logout', 'Auth\LoginController@logout');
+
+Route::get('/user/admin/subcategories/category/{id}', 'SubCategoriesController@categoryIndex');

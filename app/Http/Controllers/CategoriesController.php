@@ -6,6 +6,7 @@ use App\SubCategory;
 use Illuminate\Http\Request;
 use App\Category;
 use Webpatser\Uuid\Uuid;
+use Illuminate\Support\Facades\DB;
 
 class CategoriesController extends Controller
 {
@@ -27,9 +28,14 @@ class CategoriesController extends Controller
     public function index()
     {
         // Fetching all categories from Category Modal
-        $categories = Category::all();
+        $categories = DB::table('categories')
+            ->join('sub_categories', 'categories.category_id', '=', 'sub_categories.category_id', 'left outer')
+            ->select('categories.category_id', 'categories.category_name', DB::raw('(CASE WHEN COUNT(sub_categories.sub_category_id) IS NULL THEN "0" ELSE COUNT(sub_categories.sub_category_id) END) AS "sub_category_count"'))
+            ->groupBy(['category_id', 'category_name'])
+            ->get();
+
         // Returning to category view with the value of all categories.
-        return view('admin.category')->with('categories', $categories);
+        return view('admin.categories.index')->with('categories', $categories);
     }
 
     /**
@@ -92,10 +98,20 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
+        // Fetching all categories from Category Modal
+        $categories = DB::table('categories')
+            ->join('sub_categories', 'categories.category_id', '=', 'sub_categories.category_id', 'left outer')
+            ->select('categories.category_id', 'categories.category_name', DB::raw('(CASE WHEN COUNT(sub_categories.sub_category_id) IS NULL THEN "0" ELSE COUNT(sub_categories.sub_category_id) END) AS "sub_category_count"'))
+            ->groupBy(['category_id', 'category_name'])
+            ->get();
+
+        // Finding category to edit
         $category = Category::find($id);
-        return view('admin.editCategory')
+
+        // returning view with variables
+        return view('admin.categories.edit')
             ->with([
-                'categories' => Category::all(),
+                'categories' => $categories,
                 'category' => $category
             ]);
     }

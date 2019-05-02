@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    {{ config('app.name') }} | Admin - Categories
+    {{ config('app.name') }} | Admin - Sub Categories
 @endsection
 
 @section('pageHeader')
@@ -9,8 +9,14 @@
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header">
-                <h2 class="pageheader-title">Categories </h2>
-                <p class="pageheader-text">List of available Categories in the store.</p>
+                <h2 class="pageheader-title">
+                    @if(empty($pageHeading))
+                        Sub Categories
+                    @else
+                        Sub Categories for {{ $pageHeading }}
+                    @endif
+                </h2>
+                <p class="pageheader-text">List of available Sub Categories in the store.</p>
                 <div class="page-breadcrumb">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
@@ -18,7 +24,7 @@
                                 <a href="#" class="breadcrumb-link">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Categories
+                                Sub Categories
                             </li>
                         </ol>
                     </nav>
@@ -26,15 +32,11 @@
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
     <!-- end pageheader -->
-    <!-- ============================================================== -->
 @endsection
 
 @section('content')
-    <!-- ============================================================== -->
-    <!-- Add Category Form -->
-    <!-- ============================================================== -->
+    <!-- Add Sub Category Form -->
     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
         @if( session('success') )
             <div class="alert alert-success alert-dismissible" role="alert">
@@ -44,43 +46,49 @@
                 </button>
             </div>
         @endif
+        @if( session('error') )
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
         <div class="card">
-            <h5 class="card-header">Edit Category</h5>
+            <h5 class="card-header">Add Sub Category</h5>
             <div class="card-body">
-                @include('admin.includes.editCategoryForm')
+                @include('admin.subcategories.addForm')
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- end Add Category Form -->
-    <!-- ============================================================== -->
+    <!-- end Add Sub Category Form -->
 
     <!-- ============================================================== -->
     <!-- basic table -->
     <!-- ============================================================== -->
     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
         <div class="card">
-            <h5 class="card-header">Categories</h5>
+            <h5 class="card-header">Sub Categories</h5>
             <div class="card-body">
-                @if(count($categories) > 0)
+                @if(count($subCategories) > 0)
                     <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Category Name</th>
-                            <th scope="col">Number Of Sub Categories</th>
+                            <th scope="col">Sub Category Name</th>
+                            <th scope="col">Parent Category</th>
                             <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($categories as $category)
+                        @foreach($subCategories as $subCategory)
                             <tr>
                                 <th scope="row">{{ $loop->index+1 }}</th>
-                                <td>{{ $category['category_name'] }}</td>
-                                <td>{{ $category['sub_category_count'] }}</td>
+                                <td>{{ $subCategory->sub_category_name }}</td>
+                                <td>{{ $subCategory->category_name }}</td>
                                 <td>
-                                    <a href="/user/admin/categories/{{ $category->category_id }}/edit" class="btn btn-sm btn-primary">Edit</a>
+                                    <a href="/user/admin/subcategories/{{ $subCategory->sub_category_id }}/edit" class="btn btn-sm btn-primary">Edit</a>
                                 </td>
                                 <td>
                                     <!-- Button trigger modal -->
@@ -98,11 +106,11 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p class="mtb--10 text-danger">Do you really want to delete the Category? By deleting this category, all its sub cateories also will be deleted.</p>
+                                                    <p class="mtb--10 text-danger">Do you really want to delete the Category? By deleting this category, all its <strong>sub cateories</strong> and <strong>products</strong> will also be deleted.</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                                                    <form action="/user/admin/categories/{{ $category->category_id }}" method="POST">
+                                                    <form action="/user/admin/subcategories/{{ $subCategory->sub_category_id }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="_method" value="DELETE">
                                                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -117,7 +125,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h4>No Categories Found!</h4>
+                    <h4>No Sub Categories Found!</h4>
                 @endif
             </div>
         </div>
@@ -125,5 +133,4 @@
     <!-- ============================================================== -->
     <!-- end basic table -->
     <!-- ============================================================== -->
-
 @endsection

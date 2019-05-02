@@ -55,7 +55,7 @@
         <div class="card">
             <h5 class="card-header">Add Category</h5>
             <div class="card-body">
-                @include('admin.includes.addCategoryForm')
+                @include('admin.categories.addForm')
             </div>
         </div>
     </div>
@@ -85,8 +85,14 @@
                             @foreach($categories as $category)
                                 <tr>
                                     <th scope="row">{{ $loop->index+1 }}</th>
-                                    <td>{{ $category['category_name'] }}</td>
-                                    <td>{{ $category['sub_category_count'] }}</td>
+                                    <td>{{ $category->category_name }}</td>
+                                    <td>
+                                        <a href="/user/admin/subcategories/category/{{ $category->category_id }}">
+                                            <div>
+                                                {{ $category->sub_category_count }}
+                                            </div>
+                                        </a>
+                                    </td>
                                     <td>
                                         <a href="/user/admin/categories/{{ $category->category_id }}/edit" class="btn btn-sm btn-primary">Edit</a>
                                     </td>
@@ -106,7 +112,7 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p class="mtb--10 text-danger">Do you really want to delete the Category? By deleting this category, all its sub cateories also will be deleted.</p>
+                                                        <p class="mtb--10 text-danger">Do you really want to delete the Category? By deleting this category, all its <strong>sub cateories</strong> and <strong>products</strong> will also be deleted.</p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
