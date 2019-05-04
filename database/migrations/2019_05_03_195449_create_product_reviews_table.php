@@ -25,6 +25,9 @@ class CreateProductReviewsTable extends Migration
             $table->string('product_id', 50);
             $table->string('user_id', 50);
             $table->timestamps();
+
+            /* Primary Key */
+            $table->primary('product_review_id');
         });
     }
 
