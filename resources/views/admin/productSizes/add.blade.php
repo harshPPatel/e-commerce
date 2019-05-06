@@ -4,6 +4,10 @@
     {{ config('app.name') }} | Admin - Add Product
 @endsection
 
+@section('token')
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+
 @section('pageHeader')
     <!-- pageheader -->
     <div class="row">
@@ -59,14 +63,16 @@
               </div>
           @endif
 
-          <form action="/user/admin/products/add/colors" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
+          <form action="/user/admin/products/add/sizes" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
               <label for="productSize">Product Size :</label>
-              <input id="productSize" type="text" name="product_size" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control">
+              <input id="productSize" type="text" name="product_size" data-parsley-trigger="change" placeholder="Type here..." autocomplete="off" class="form-control">
             </div>
             <div class="row">
               <div class="col-12">
+                <p class="text-danger mt-1" id="formError" role="alert">
+                </p>
                 @if($errors->any())
                     @foreach($errors->all() as $error)
                         <p class="text-danger mt-1" role="alert">
@@ -76,13 +82,13 @@
                 @endif
                 <input type="hidden" name="process_status" value="1">
                 <div class="text-right mb-3 mt-3">
-                  <button type="button" class="btn btn-primary btn-space">Add</button>
+                  <button type="submit" id="addButton" class="btn btn-primary btn-space">Add</button>
                   <button type="reset" class="btn btn-space btn-light">Reset</button>
                   <hr>
                 </div>
                 <p class="text-right">
                   <a href="/user/admin/products/add/cancel" class="btn btn-space btn-secondary">Cancel</a>
-                  <button type="submit" class="btn btn-space btn-primary">Next Step</button>
+                  <a type="button" id="formSubmit" class="btn btn-space btn-primary" href="/user/admin/products/add/colors">Next Step</a>
                 </p>
               </div>
             </div>
@@ -96,7 +102,28 @@
           <span class="display-7 mr-lg-2">Sizes</span>
         </h3>
         <div class="card-body" id="sizes">
-
+          <table class="table table-hover table-borded">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Size</th>
+              </tr>
+            </thead>
+            <tbody id="sizeTable">
+              {{-- @if(!empty($sizes)) --}}
+                @if(count($sizes) > 0)
+                  @foreach ($sizes as $size)
+                    <tr>
+                      <td>{{ $loop->index+1 }}</td>
+                      <td>$size->product_size</td>
+                    </tr>
+                  @endforeach
+                @else
+                    <tr aria-colspan="2">No Sizes Found.</tr>
+                @endif
+              {{-- @endif --}}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

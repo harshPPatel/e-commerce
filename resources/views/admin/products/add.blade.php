@@ -58,7 +58,7 @@
               </div>
           @endif
 
-          <form action="/user/admin/products/add/sizes" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
+          <form action="/user/admin/products/add" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
               <label for="productName">Product name :</label>

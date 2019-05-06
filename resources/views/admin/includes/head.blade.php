@@ -2,6 +2,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+<!-- Token -->
+@yield('token')
+
 <!-- Title of the Page -->
 <title>
     @hasSection('title')

@@ -46,7 +46,6 @@
 
 {{--@yield('modals')--}}
 
-
 <!-- jquery latest version -->
 <script src="{{ asset('admin/js/vendor/jquery-3.3.1.min.js') }}"></script>
 <!-- bootstap bundle js -->
@@ -71,6 +70,8 @@
 
 <!-- Main js - Custom file -->
 <script src="{{ asset('js/app.js') }}"></script>
+
+@yield('scripts')
 
 </body>
 </html>
