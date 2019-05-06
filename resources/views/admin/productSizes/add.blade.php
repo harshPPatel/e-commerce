@@ -80,15 +80,14 @@
                         </p>
                     @endforeach
                 @endif
-                <input type="hidden" name="process_status" value="1">
                 <div class="text-right mb-3 mt-3">
-                  <button type="submit" id="addButton" class="btn btn-primary btn-space">Add</button>
+                  <button type="button" id="addButton" class="btn btn-primary btn-space">Add</button>
                   <button type="reset" class="btn btn-space btn-light">Reset</button>
                   <hr>
                 </div>
                 <p class="text-right">
                   <a href="/user/admin/products/add/cancel" class="btn btn-space btn-secondary">Cancel</a>
-                  <a type="button" id="formSubmit" class="btn btn-space btn-primary" href="/user/admin/products/add/colors">Next Step</a>
+                  <button type="button" id="nextStepButton" class="btn btn-space btn-primary">Next Step</button>
                 </p>
               </div>
             </div>
@@ -110,21 +109,57 @@
               </tr>
             </thead>
             <tbody id="sizeTable">
-              {{-- @if(!empty($sizes)) --}}
-                @if(count($sizes) > 0)
-                  @foreach ($sizes as $size)
-                    <tr>
-                      <td>{{ $loop->index+1 }}</td>
-                      <td>$size->product_size</td>
-                    </tr>
-                  @endforeach
-                @else
-                    <tr aria-colspan="2">No Sizes Found.</tr>
-                @endif
-              {{-- @endif --}}
+              
             </tbody>
           </table>
         </div>
       </div>
     </div>
+@endsection
+
+@section('scripts')
+  <script src="{{ asset('js/addProductSize.js') }}"></script>
+  <script>
+    
+    document.getElementById('nextStepButton').addEventListener('click', function() {
+      //Select token with getAttribute
+      var TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      // Sizes from LocalStorage
+      var sizes = localStorage.getItem('productSizes');
+
+      // URL to post
+      var URL = '/user/admin/products/add/sizes';
+
+      // Redirct URL
+      var REDIRECT_URL = '/user/admin/products/add/colors';
+
+      // Fetching URL
+      fetch(URL, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": TOKEN 
+        },
+        method: 'post',
+        // credentials: "same-origin",
+        body: JSON.stringify({
+          _token: TOKEN,
+          productSizes: JSON.parse(sizes), 
+        }),
+      })
+      .then(function(res) {
+        return res.json();
+        // window.location.href = REDIRECT_URL;
+      })
+      .catch(function(error) {
+        console.log(error);
+        
+        var addProductSizeError = document.getElementById('formError');
+        addProductSizeError.innerHTML = "Error in adding the size! Please try it again!"
+      });
+    });
+
+  </script>    
 @endsection

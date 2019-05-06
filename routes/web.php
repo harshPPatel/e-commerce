@@ -45,16 +45,13 @@ Route::get('/user/admin/products', 'ProductsController@index');
 
 // Admin Add Product Deatils Route
 Route::get('/user/admin/products/add', 'AddProductsController@createProduct');
-Route::post('/user/admin/products/add', [
-    'middleware' => 'IsProcessDone',
-    'uses' => 'AddProductsController@submitProduct'
-  ]);
+Route::post('/user/admin/products/add', 'AddProductsController@submitProduct');
 
 // Admin Add Product Sizes Route
 Route::get('/user/admin/products/add/sizes', 'AddProductsController@createSizes');
 Route::post('/user/admin/products/add/sizes', 'AddProductsController@submitSizes');
 
-Route::get('/user/admin/products/add/colors', 'AddProductsController@createColors');
+// Route::get('/user/admin/products/add/colors', 'AddProductsController@createColors');
 // Route::post('/user/admin/products/add/colors', 'AddProductsController@submitSizes');
 
 // Handling Cancel Request

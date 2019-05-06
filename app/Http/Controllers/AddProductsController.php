@@ -13,7 +13,7 @@ class AddProductsController extends Controller
     private $sizes = array();
     private $colors;
     private $datasheets;
-    private $isProcessDone = false;
+    private $isProcessDone;
     /**
      * Create a new controller instance. And adds middlewares.
      *
@@ -21,7 +21,6 @@ class AddProductsController extends Controller
      */
     public function __construct()
     {
-        $this->isProcessDone = true;
         $this->middleware('auth');
     }
 
@@ -60,15 +59,14 @@ class AddProductsController extends Controller
         
         $this->product = $newProduct;
         
-        // $newProduct->save();
         return redirect('/user/admin/products/add/sizes');
     }
 
     public function createSizes() {
         if($this->isProcessDone) {
-            return view('admin.productSizes.add');
-        } else {
             return $this->errorHandller();
+        } else {
+            return view('admin.productSizes.add');
         }
     }
 
@@ -78,26 +76,42 @@ class AddProductsController extends Controller
 
     public function submitSizes(Request $request) {
         // Validating the request
-        $this->validate($request, [
-            'product_size' => 'required',
-        ]);
         
-        $newSize = new ProductSize;
+        $request = $request->all();
+        $productSizes = $request->productSizes;
+        $product = $this->product;
+        $savedSizes = $this->sizes;
 
-        $uniqueId = Uuid::generate(4);
-        // Checking if unique id already exists or not. If it does than recreating the unique id.
-        if(ProductSize::find($uniqueId)) {
+        foreach ($productSizes as $size) {
+            $newSize = new ProductSize;
+
             $uniqueId = Uuid::generate(4);
+            
+            // Checking if unique id already exists or not. If it does than recreating the unique id.
+            if(ProductSize::find($uniqueId)) {
+                $uniqueId = Uuid::generate(4);
+            }
+            
+            // Checking if unique id already exists in sizes list or not.
+            foreach($savedSizes as $productSize) {
+                if($productSize->product_size_id == $uniqueID){
+                    $uniqueId = Uuid::generate(4);
+                }
+            }
+
+            $newSize->product_size_id = $uniqueID;
+            $newSize->product_size = $size->product_size;
+            $newSize->product_id = $product->product_id; 
+            array_push($productSizes, $newSize);
         }
+
+        
         $newSize->product_size_id = $uniqueId;
 
         $newSize->product_size = $request->product_size;  
         // $newSize->product_id = $this->product->product_id;
 
-        // $newSize->save();
-        array_push($this->sizes, $newSize);
-
-        return redirect('/user/admin/products/add/sizes')->with('sizes', $this->sizes);
+        return redirect('/user/admin/products/add/colors');
     }
 
     public function createColors() {

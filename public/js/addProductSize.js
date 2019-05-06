@@ -9,11 +9,12 @@ function showSizes() {
   outputElement.innerHTML = "";
   var sizes = JSON.parse(localStorage.getItem('productSizes'));
 
-  for (let index = 0; index < sizes.length; index++) {
+  var number = 1;
+  for (var index = sizes.length - 1; index >= 0; index--) {
     const size = sizes[index];
     var row = document.createElement('tr');
     var numberTd = document.createElement('td');
-    numberTd.innerHTML = index+1;
+    numberTd.innerHTML = number;
     var sizeTd = document.createElement('td');
     sizeTd.innerHTML = size.product_size;
     var scopeAttribute = document.createAttribute('scope');
@@ -24,7 +25,11 @@ function showSizes() {
     row.appendChild(sizeTd);
 
     outputElement.appendChild(row);
+
+    number++;
   }
+
+  number = 1;
 }
 
 function doesExist() {
@@ -82,11 +87,16 @@ function addSize() {
     showSizes();
   }
   
+  addProductSizeInput.value = "";
+  addProductSizeInput.focus();
 
 }
 
 
-addProductSizeAddButton.addEventListener('click', addSize);
+addProductSizeAddButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  addSize();
+});
 addProductSizeInput.onkeypress = function(e) {
   var key = e.charCode || e.keyCode || 0;     
   if (key == 13) {

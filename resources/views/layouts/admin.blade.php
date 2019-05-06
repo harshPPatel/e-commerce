@@ -9,6 +9,9 @@
     {{-- Including Head --}}
     @include('admin.includes.head')
 
+    {{-- CSRF Token --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 </head>
 
 <body>
