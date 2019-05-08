@@ -54,7 +54,7 @@
                 </div>
               @endif
               @if(session('success'))
-                <div class="alert alert-danger alert-dismissable">
+                <div class="alert alert-success alert-dismissable">
                   <p>
                     {{ session('success') }}
                   </p>
@@ -85,7 +85,7 @@
                                   <th scope="row">{{ $loop->index+1 }}</th>
                                   <td>{{ $product->product_name }}</td>
                                   <td>{{ $product->product_price }}</td>
-                                  <td>{{ $product->product_old_price }}</td>
+                                  <td>{{ $product->product_old_price == '' ? 'None' : $product->product_old_price }}</td>
                                   <td>{{ $product->product_stock }}</td>
                                   <td>{{ $product->product_description }}</td>
                                   <td>S1, S2, S3, S4</td>
@@ -148,8 +148,14 @@
                   </table>
               @else
                   <h4>No Products Found!</h4>
-                  <a href="/user/admin/products/add" class="btn btn-primary">Add Product Now!</a>
+                  <a href="/user/admin/products/create" class="btn btn-primary">Add Product Now!</a>
               @endif
+            </div>
+        </div>
+        <div class="card" style="max-width: 250px; width: 100%;">
+            <h5 class="card-header">Quick Suggestions</h5>
+            <div class="card-body">
+                <a href="/user/admin/products/create" class="btn btn-primary">Add Product</a>
             </div>
         </div>
     </div>

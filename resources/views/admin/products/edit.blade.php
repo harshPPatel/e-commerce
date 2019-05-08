@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    {{ config('app.name') }} | Admin - Add Product
+    {{ config('app.name') }} | Admin - Edit Product
 @endsection
 
 @section('pageHeader')
@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header">
-                <h2 class="pageheader-title">Add Product</h2>
+                <h2 class="pageheader-title">Edit Product</h2>
                 <div class="page-breadcrumb">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
@@ -20,7 +20,7 @@
                                 <a href="/user/admin/products" class="breadcrumb-link">Products</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Add Product
+                                Edit Product
                             </li>
                         </ol>
                     </nav>
@@ -37,7 +37,7 @@
     <div class="col-12">
       <div class="card">
         <h3 class="card-header">
-          <span class="display-7 mr-lg-2">Product Details</span>
+          <span class="display-7 mr-lg-2">Edit Product Details</span>
         </h3>
         <div class="card-body">
           @if( session('success') )
@@ -57,31 +57,31 @@
               </div>
           @endif
 
-          <form action="/user/admin/products" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
+          <form action="/user/admin/products/{{ $product->product_id }}" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
               <label for="productName">Product name :</label>
-              <input id="productName" type="text" name="product_name" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control">
+              <input id="productName" type="text" name="product_name" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control" value="{{ $product->product_name }}">
             </div>
             <div class="form-group">
               <label for="productPrice">Product Price :</label>
-              <input id="productPrice" type="text" name="product_price" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control">
+              <input id="productPrice" type="text" name="product_price" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control" value="{{ $product->product_price }}">
             </div>
             <div class="form-group">
               <label for="productDescription">Product Description :</label>
-              <textarea id="productDescription" name="product_description" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control"></textarea>
+              <textarea id="productDescription" name="product_description" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control">{{ $product->product_description }}</textarea>
             </div>
             <div class="form-group">
               <label for="productStock">Product Stock :</label>
-              <input id="productStock" type="text" name="product_stock" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control">
+              <input id="productStock" type="text" name="product_stock" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control" value="{{ $product->product_stock }}">
             </div>
             <div class="form-group">
               <div class="row">
                 <div class="col-md-4">
                   <label for="productIsFeature">Is Featured?</label>
                   <select id="productIsFeature" name="is_featured" autocomplete="off" class="form-control">
-                    <option value="true">Yes</option>
-                    <option value="false" selected>No</option>
+                    <option value="true" {{ $product->is_featured == '1' ? 'selected' : '' }}>Yes</option>
+                    <option value="false" {{ $product->is_featured == '0' ? 'selected' : '' }}>No</option>
                   </select>
                 </div>
               </div>
@@ -91,8 +91,8 @@
                 <div class="col-md-4">
                   <label for="productIsAvailable">Product Status</label>
                   <select id="productIsAvailable" name="is_available" autocomplete="off" class="form-control">
-                    <option value="true" selected>Available</option>
-                    <option value="false">Hidden</option>
+                    <option value="true" {{ $product->is_available == '1' ? 'selected' : '' }}>Available</option>
+                    <option value="false" {{ $product->is_available == '0' ? 'selected' : '' }}>Hidden</option>
                   </select>
                 </div>
               </div>
@@ -116,8 +116,9 @@
                     @endforeach
                 @endif
                 <p class="text-right">
+                  <input type="hidden" name="_method" value="PUT">
                   <button type="reset" class="btn btn-space btn-light">Reset</button>
-                  <button type="submit" class="btn btn-space btn-primary">Add Product</button>
+                  <button type="submit" class="btn btn-space btn-primary">Update Product</button>
                 </p>
               </div>
             </div>
