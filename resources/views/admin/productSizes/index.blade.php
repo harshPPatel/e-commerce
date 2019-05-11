@@ -39,44 +39,63 @@
 
 
 @section('content')
-    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-      <div class="card">
-        <h3 class="card-header">
-          <span class="display-7 mr-lg-2">Product Sizes</span>
-        </h3>
-        <div class="card-body">
-          @if( session('success') )
-            <div class="alert alert-success alert-dismissible" role="alert">
-                {{ session('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+    <div class="card">
+      <h3 class="card-header">
+        <span class="display-7 mr-lg-2">Product Sizes</span>
+      </h3>
+      <div class="card-body">
+        @if( session('success') )
+          <div class="alert alert-success alert-dismissible" role="alert">
+              {{ session('success') }}
+              <button 
+                type="button" 
+                class="close" 
+                data-dismiss="alert" 
+                aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+        @if( session('error') )
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                {{ session('error') }}
+                <button 
+                  type="button" 
+                  class="close" 
+                  data-dismiss="alert" 
+                  aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-          @endif
-          @if( session('error') )
-              <div class="alert alert-danger alert-dismissible" role="alert">
-                  {{ session('error') }}
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-          @endif
+        @endif
 
-          <form action="/user/admin/products/{{ $product_id }}/sizes" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
+        <form 
+          action="/user/admin/products/{{ $product_id }}/sizes" 
+          method="post" 
+          id="basicform" 
+          data-parsley-validate="" 
+          enctype="multipart/form-data">
             @csrf
             <div class="form-group">
               <label for="productSize">Product Size :</label>
-              <input id="productSize" type="text" name="product_size" data-parsley-trigger="change" placeholder="Type here..." autocomplete="off" class="form-control">
+              <input 
+                id="productSize" 
+                type="text" 
+                name="product_size" 
+                data-parsley-trigger="change" 
+                placeholder="Type here..." 
+                autocomplete="off" 
+                class="form-control">
             </div>
             <div class="row">
               <div class="col-12">
-                </p>
                 @if($errors->any())
-                    @foreach($errors->all() as $error)
-                        <p class="text-danger mt-1" role="alert">
-                            <strong>{{ $error }}</strong>
-                        </p>
-                    @endforeach
+                  @foreach($errors->all() as $error)
+                    <p class="text-danger mt-1" role="alert">
+                        <strong>{{ $error }}</strong>
+                    </p>
+                  @endforeach
                 @endif
                 <p class="text-right mb-3 mt-3">
                   <button type="submit" class="btn btn-primary btn-space">Add</button>
@@ -84,74 +103,92 @@
                 </p>
               </div>
             </div>
-          </form>
-        </div>
+        </form>
       </div>
     </div>
-    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-      <div class="card">
-        <h3 class="card-header">
-          <span class="display-7 mr-lg-2">Sizes</span>
-        </h3>
-        <div class="card-body" id="sizes">
-          <table class="table table-hover table-borded text-center">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Size</th>
-                <th scope="col">Edit</th>
-                <th scope="col">Delete</th>
-              </tr>
-            </thead>
-            <tbody id="sizeTable">
-              @if(count($sizes) > 0)
-                @foreach($sizes as $size)
-                  <tr>
-                    <td scope="col">{{ $loop->index+1 }}</td>
-                    <td scope="col">{{ $size->product_size }}</td>
-                    <td scope="col">
-                      <a href="/user/admin/products/{{ $product_id }}/sizes/{{ $size->product_size_id }}/edit" class="btn btn-sm btn-primary">Edit</a>
-                    </td>
-                    <td scope="col">
-                      <!-- Button trigger modal -->
-                      <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteProductSizeModal{{ $loop->index+1 }}">
-                          Delete
-                      </button>
-                      <!-- Delete category modal -->
-                      <div class="modal fade" id="deleteProductSizeModal{{ $loop->index+1 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="exampleModalLabel">Confirm Delete.</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span aria-hidden="true">&times;</span>
-                                      </button>
-                                  </div>
-                                  <div class="modal-body text-left">
-                                      <p class="mtb--10 text-danger">Do you really want to delete the Product size?</p>
-                                  </div>
-                                  <div class="modal-footer">
-                                      <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                                      <form action="/user/admin/products/{{ $product_id }}/sizes/{{ $size->product_size_id }}" method="POST">
-                                          @csrf
-                                          <input type="hidden" name="_method" value="DELETE">
-                                          <button type="submit" class="btn btn-danger">Delete</button>
-                                      </form>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                    </td>
-                  </tr>
-                @endforeach
-              @else
+  </div>
+  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+    <div class="card">
+      <h3 class="card-header">
+        <span class="display-7 mr-lg-2">Sizes</span>
+      </h3>
+      <div class="card-body" id="sizes">
+        <table class="table table-hover table-borded text-center">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Size</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody id="sizeTable">
+            @if(count($sizes) > 0)
+              @foreach($sizes as $size)
                 <tr>
-                  <td colspan="2">No Sizes Found!</td>
+                  <td scope="col">{{ $loop->index+1 }}</td>
+                  <td scope="col">{{ $size->product_size }}</td>
+                  <td scope="col">
+                    <a 
+                      href="/user/admin/products/{{ $product_id }}/sizes/{{ $size->product_size_id }}/edit" 
+                      class="btn btn-sm btn-primary">
+                        Edit
+                    </a>
+                  </td>
+                  <td scope="col">
+                    <!-- Button trigger modal -->
+                    <button 
+                      type="button" 
+                      class="btn btn-danger btn-sm" 
+                      data-toggle="modal" 
+                      data-target="#deleteProductSizeModal{{ $loop->index+1 }}">
+                        Delete
+                    </button>
+                    <!-- Delete category modal -->
+                    <div 
+                      class="modal fade" 
+                      id="deleteProductSizeModal{{ $loop->index+1 }}" 
+                      tabindex="-1" 
+                      role="dialog" 
+                      aria-labelledby="exampleModalLabel" 
+                      aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Confirm Delete.</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body text-left">
+                                    <p class="mtb--10 text-danger">
+                                      Do you really want to delete the Product size?
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                                    <form 
+                                      action="/user/admin/products/{{ $product_id }}/sizes/{{ $size->product_size_id }}" 
+                                      method="POST">
+                                        @csrf
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </td>
                 </tr>
-              @endif
-            </tbody>
-          </table>
-        </div>
+              @endforeach
+            @else
+              <tr>
+                <th colspan="4">No Sizes Found!</th>
+              </tr>
+            @endif
+          </tbody>
+        </table>
       </div>
     </div>
+  </div>
 @endsection

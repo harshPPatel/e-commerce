@@ -97,14 +97,21 @@
                                             }
                                         }
                                     @endphp
-                                    @foreach($productSize as $size)
-                                        @if( $loop->index+1 == count($productSize) )
-                                            {{ $size->product_size }} <br> 
-                                        @else
-                                            {{ $size->product_size }},{{ " " }} 
-                                        @endif
-                                    @endforeach
-                                    <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/sizes">Add Size</a>
+                                    @if (count($productSize) > 0) 
+                                        <a href="/user/admin/products/{{ $product->product_id }}/sizes">
+                                            <div>
+                                                @foreach($productSize as $size)
+                                                    @if( $loop->index+1 == count($productSize) )
+                                                        {{ $size->product_size }} <br> 
+                                                    @else
+                                                        {{ $size->product_size }},{{ " " }} 
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </a>
+                                    @else 
+                                        <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/sizes">Add Size</a>
+                                    @endif
                                   </td>
                                   <td scope="col">C1 - circle with name, C2 - circle with name, C3 - circle with name, C4 - circle with name</td>
                                   <td scope="col">
