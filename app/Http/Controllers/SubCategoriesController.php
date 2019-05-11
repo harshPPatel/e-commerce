@@ -200,7 +200,7 @@ class SubCategoriesController extends Controller
         // Fetching all Categories
         $categories = Category::all();
 
-        // Fetching all sub categories
+        // Fetching all sub categories with category name
         $subCategories = DB::table('sub_categories')
             ->join('categories', 'sub_categories.category_id', '=', 'categories.category_id')
             ->select('sub_categories.*', 'categories.category_name')

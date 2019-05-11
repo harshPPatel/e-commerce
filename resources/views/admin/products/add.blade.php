@@ -64,6 +64,27 @@
               <input id="productName" type="text" name="product_name" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control">
             </div>
             <div class="form-group">
+              <label for="sub_category_id">Product Sub Category</label>
+              <select name="sub_category_id" id="sub_category_id" class="form-control">
+                @foreach ($categories as $category)
+                  @php
+                    // Sub categories for each category
+                    $subCats = [];
+                    foreach ($subCategories as $subCategory) {
+                      if ($category->category_id == $subCategory->category_id) {
+                        array_push($subCats, $subCategory);
+                      }
+                    }
+                  @endphp
+                  <optgroup label="{{$category->category_name}}">
+                    @foreach($subCats as $subCategory)
+                      <option value="{{ $subCategory->sub_category_id }}">{{ $subCategory->sub_category_name }}</option>
+                    @endforeach
+                  </optgroup>                    
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
               <label for="productPrice">Product Price :</label>
               <input id="productPrice" type="text" name="product_price" data-parsley-trigger="change" required placeholder="Type here..." autocomplete="off" class="form-control">
             </div>

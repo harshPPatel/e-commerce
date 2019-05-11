@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Webpatser\Uuid\Uuid;
 use  App\Product;
 use  App\ProductSize;
-use Webpatser\Uuid\Uuid;
+use  App\Category;
+use  App\SubCategory;
 
 class ProductsController extends Controller
 {
@@ -17,6 +19,7 @@ class ProductsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('isProductExists');
     }
 
     /**
@@ -26,8 +29,14 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::orderByDesc('created_at')->get();
+        // Fetching all products in descending order of the time they were created
+        // $products = Product::orderByDesc('created_at')->get();
+        $products = $this->getAllProducts();
+
+        // Fetching all sizes of products
         $productSizes = ProductSize::all();
+        
+        // Returning the view with variables
         return view('admin.products.index')
             ->with([
                 'products' => $products,
@@ -42,7 +51,18 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        return view('admin.products.add');
+        // Fetching all sub categories
+        $subCategories = SubCategory::all();
+
+        // Fetching all categories
+        $categories = Category::all();
+
+        // Returning view with variables
+        return view('admin.products.add')
+            ->with([
+                'categories' => $categories,
+                'subCategories' => $subCategories
+            ]);
     }
 
     /**
@@ -64,15 +84,8 @@ class ProductsController extends Controller
         // Creating new Product
         $product = new Product;
 
-        // Generating the Unique ID for Primary Key Column
-        $uniqueId = Uuid::generate(4);
-        // Checking if unique id already exists or not. If it does than recreating the unique id.
-        if(Product::find($uniqueId)) {
-            $uniqueId = Uuid::generate(4);
-        }
-
         // Setting values of Product
-        $product->product_id = $uniqueId;
+        $product->product_id = $this->createUniqueId();
         $product->product_name = $request->product_name;
         $product->product_price = $request->product_price;
         $product->product_description = $request->product_description;
@@ -80,8 +93,15 @@ class ProductsController extends Controller
         $product->is_featured = $request->is_featured == 'true' ? true : false;
         $product->is_available = $request->is_available == 'true' ? true : false;
         $product->product_video = $request->product_video;
+        $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id) 
+            ? $request->sub_category_id 
+            : env('OTHERS_SUB_CATEGORY_ID');
 
-        if(Product::where('product_name', 'LIKE', $product->product_name)->exists()) {
+        // Cheking if product with same name exists or not
+        if(Product::where([
+            ['product_name', 'LIKE', $product->product_name],
+            ['sub_category_id', '=', $product->sub_category_id]
+        ])->exists()) {
 
             // Redericting the page with error message
             return redirect('/user/admin/products')->with('error', 'Product already exists in the store!');
@@ -115,8 +135,22 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
+        // Finding the product
         $product = Product::find($id);
-        return view('admin.products.edit')->with('product', $product);
+
+        // Fetching all sub categories
+        $subCategories = SubCategory::all();
+
+        // Fetching all categories
+        $categories = Category::all();
+
+        // Returning view with variables
+        return view('admin.products.edit')
+            ->with([
+                'product' => $product,
+                'categories' => $categories,
+                'subCategories' => $subCategories
+            ]);
     }
 
     /**
@@ -147,12 +181,19 @@ class ProductsController extends Controller
         $product->is_featured = $request->is_featured == 'true' ? true : false;
         $product->is_available = $request->is_available == 'true' ? true : false;
         $product->product_video = $request->product_video;
+        $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id)
+            ? $request->sub_category_id
+            : env('OTHERS_SUB_CATEGORY_ID');
 
-        if($request->product_name != $product->product_name && Product::where('product_name', 'LIKE', $product->product_name)->exists()) {
+        // Checking if the product already exists with same product name in the same sub category or not
+        if ($this->isEditedProductExists($request, $product)) {
             // Redericting the page with error message
             return redirect('/user/admin/products')->with('error', 'Product already exists in the store!');
+        } 
+        else {
+            // Updating name of product after validation
+            $product->product_name = $request->product_name;
 
-        } else {
             // Saving the product in database.
             $product->save();
             
@@ -169,8 +210,80 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
+        // Finding the product
         $product = Product::find($id);
+
+        // Deleting the product
         $product->delete();
-        return redirect('/user/admin/products')->with('error', 'Product Deleted from the store.');
+
+        // Redirecting to products index page with success message
+        return redirect('/user/admin/products')
+            ->with('success', 'Product Deleted from the store.');
+    }
+
+    /**
+     * Creates unique id for the primary key field of product. It also checks to the dataase that if any other product with the same unique Id exists, it regenrates the uniqueId.
+     *
+     * @return string uniqueId
+     */
+    private function createUniqueId() {
+        // Generating the Unique ID for Primary Key Column
+        $uniqueId = Uuid::generate(4);
+        
+        // Checking if unique id already exists or not. If it does than recreating the unique id.
+        if(Product::find($uniqueId)) {
+            // Calling the function again to create new unique id
+            createUniqueId();
+        }
+
+        // Returning the unique id
+        return $uniqueId;
+    }
+
+    /**
+     * Checks of the provided sub category for product is exists or not.
+     *
+     * @param string $sub_category_id - Id of selected sub category
+     * @return boolean true if it exists; false if it does not.
+     */
+    private function isSubCategoryExists($sub_category_id) {
+
+        // Cheking the sub_category_id in database
+        if (SubCategory::find($sub_category_id)) {
+            // returning true
+            return true;
+        } else {
+            // returning false
+            return false;
+        }
+    }
+
+    /**
+     * Checks if the edited product already exists in the database or not
+     *
+     * @param Request $request
+     * @param Product $product
+     * @return boolean true if the product with same name in the same category exists; false if it does not.
+     */
+    private function isEditedProductExists($request, $product) {
+        return $request->product_name != $product->product_name 
+            && Product::where([
+                ['product_name', 'LIKE', $request->product_name],
+                ['sub_category_id', '=', $product->sub_category_id]
+            ])->exists();
+    }
+
+    /**
+     * Gets all products with category and sub categories name
+     *
+     * @return array Array of all products
+     */
+    private function getAllProducts() {
+        return DB::table('products')
+            ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.sub_category_id')
+            ->join('categories', 'categories.category_id', '=', 'sub_categories.category_id')
+            ->select('products.*', 'categories.category_name', 'sub_categories.sub_category_name')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }

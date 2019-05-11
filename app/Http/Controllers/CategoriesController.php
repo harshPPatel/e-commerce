@@ -189,6 +189,7 @@ class CategoriesController extends Controller
 
         // Checking if unique id already exists or not. If it does than recreating the unique id.
         if(Category::find($uniqueId)) {
+            // Calling the function again to create new unique id
             createUniqueId();
         }
 

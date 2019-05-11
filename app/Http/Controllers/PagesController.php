@@ -17,6 +17,7 @@ class PagesController extends Controller
     public function index() {
         return view('pages.index');
     }
+
     /**
      * Handles About page request of the website and renders about view.
      *
@@ -25,6 +26,7 @@ class PagesController extends Controller
     public function about() {
         return view('pages.about');
     }
+    
     /**
      * Handles Contact page request of the website and renders contact view.
      *
