@@ -84,19 +84,19 @@
                         <tbody>
                             @foreach($categories as $category)
                                 <tr>
-                                    <th scope="row">{{ $loop->index+1 }}</th>
-                                    <td>{{ $category->category_name }}</td>
-                                    <td>
-                                        <a href="/user/admin/subcategories/category/{{ $category->category_id }}">
-                                            <div>
+                                    <td scope="col">{{ $loop->index+1 }}</td>
+                                    <td scope="col">{{ $category->category_name }}</td>
+                                    <td scope="col">
+                                        <a href="/user/admin/subcategories/category/{{ $category->category_id }}" style="text-decoration: underline;">
+                                            <div style="width: 100%; height: 100%">
                                                 {{ $category->sub_category_count }}
                                             </div>
                                         </a>
                                     </td>
-                                    <td>
+                                    <td scope="col">
                                         <a href="/user/admin/categories/{{ $category->category_id }}/edit" class="btn btn-sm btn-primary">Edit</a>
                                     </td>
-                                    <td>
+                                    <td scope="col">
                                         <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCategoryModal{{ $loop->index+1 }}">
                                             Delete

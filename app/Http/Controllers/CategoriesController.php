@@ -18,6 +18,7 @@ class CategoriesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('isCategoryExists');
     }
 
     /**
@@ -28,14 +29,11 @@ class CategoriesController extends Controller
     public function index()
     {
         // Fetching all categories from Category Modal
-        $categories = DB::table('categories')
-            ->join('sub_categories', 'categories.category_id', '=', 'sub_categories.category_id', 'left outer')
-            ->select('categories.category_id', 'categories.category_name', DB::raw('(CASE WHEN COUNT(sub_categories.sub_category_id) IS NULL THEN "0" ELSE COUNT(sub_categories.sub_category_id) END) AS "sub_category_count"'))
-            ->groupBy(['category_id', 'category_name'])
-            ->get();
+        $categories = $this->getAllCategories();
 
         // Returning to category view with the value of all categories.
-        return view('admin.categories.index')->with('categories', $categories);
+        return view('admin.categories.index')
+            ->with('categories', $categories);
     }
 
     /**
@@ -63,20 +61,22 @@ class CategoriesController extends Controller
 
         // Creating Category Object
         $category = new Category;
-        $uniqueId = Uuid::generate(4);
-        // Checking if unique id already exists or not. If it does than recreating the unique id.
-        if(Category::find($uniqueId)) {
-            $uniqueId = Uuid::generate(4);
-        }
-        $category->category_id = $uniqueId;
+        
+        // Setting values
+        $category->category_id = $this->createUniqueId();
         $category->category_name = $request->category_name;
+
+        // Checking if the category with same name exist or not
         if(Category::where('category_name', 'LIKE', $category->category_name)->exists()) {
+            // Redirecting to the categories index page with error message
             return redirect('/user/admin/categories')->with('error', 'Category already exists.');
-        } else {
+        } 
+        else {
+            // Saving category
             $category->save();
+            // Redirecting to the categories index page with success message
             return redirect('/user/admin/categories')->with('success', 'Category Added.');
         }
-
     }
 
     /**
@@ -99,21 +99,18 @@ class CategoriesController extends Controller
     public function edit($id)
     {
         // Fetching all categories from Category Modal
-        $categories = DB::table('categories')
-            ->join('sub_categories', 'categories.category_id', '=', 'sub_categories.category_id', 'left outer')
-            ->select('categories.category_id', 'categories.category_name', DB::raw('(CASE WHEN COUNT(sub_categories.sub_category_id) IS NULL THEN "0" ELSE COUNT(sub_categories.sub_category_id) END) AS "sub_category_count"'))
-            ->groupBy(['category_id', 'category_name'])
-            ->get();
+        $categories = $this->getAllCategories();
 
         // Finding category to edit
         $category = Category::find($id);
 
-        // returning view with variables
+        // returning the view with variables
         return view('admin.categories.edit')
             ->with([
                 'categories' => $categories,
                 'category' => $category
             ]);
+
     }
 
     /**
@@ -130,18 +127,23 @@ class CategoriesController extends Controller
             'category_name'=> 'required'
         ]);
 
-        // Creating Category Object
+        // Finding category
         $category = Category::find($id);
+
+        // Updating fields
         $category->category_name = $request->category_name;
 
         // Checking if the category with same name exist or not
         if(Category::where('category_name', 'LIKE', $category->category_name)->exists()) {
+            // Redirecting to the categories index page with error message
             return redirect('/user/admin/categories')->with('error', 'Category already exists.');
-        } else {
+        } 
+        else {
+            // Saving category
             $category->save();
+            // Redirecting to the categories index page with success message
             return redirect('/user/admin/categories')->with('success', 'Category Edited.');
         }
-
     }
 
     /**
@@ -152,9 +154,45 @@ class CategoriesController extends Controller
      */
     public function destroy(Request $request,$id)
     {
+        // Finding Category
         $category = Category::find($id);
+        // Deleting Category
         $category->delete();
-        return redirect('/user/admin/categories')->with('error', 'Category Deleted.');
+
+        // Redirecting to categories index page with success message
+        return redirect('/user/admin/categories')->with('success', 'Category Deleted.');
     }
 
+    /**
+     * Returns all categories.
+     *
+     * @return array Array of all categories
+     */
+    private function getAllCategories() {
+        return DB::table('categories')
+            ->join('sub_categories', 'categories.category_id', '=', 'sub_categories.category_id', 'left outer')
+            ->select('categories.category_id', 
+                'categories.category_name', 
+                DB::raw('(CASE WHEN COUNT(sub_categories.sub_category_id) IS NULL THEN "0" ELSE COUNT(sub_categories.sub_category_id) END) AS "sub_category_count"'))
+            ->groupBy(['category_id', 'category_name'])
+            ->get();
+    }
+
+    /**
+     * Creates unique id for the primary key field of category. It also checks to the dataase that if any other category with the same unique Id exists, it regenrates the uniqueId.
+     *
+     * @return string uniqueId
+     */
+    private function createUniqueId() {
+        // Generating Unique ID
+        $uniqueId = Uuid::generate(4);
+
+        // Checking if unique id already exists or not. If it does than recreating the unique id.
+        if(Category::find($uniqueId)) {
+            createUniqueId();
+        }
+
+        // Returning the unique Id
+        return $uniqueId;
+    }
 }
