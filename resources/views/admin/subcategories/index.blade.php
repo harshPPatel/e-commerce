@@ -84,13 +84,13 @@
                         <tbody>
                         @foreach($subCategories as $subCategory)
                             <tr>
-                                <th scope="row">{{ $loop->index+1 }}</th>
-                                <td>{{ $subCategory->sub_category_name }}</td>
-                                <td>{{ $subCategory->category_name }}</td>
-                                <td>
+                                <td scope="col">{{ $loop->index+1 }}</td>
+                                <td scope="col">{{ $subCategory->sub_category_name }}</td>
+                                <td scope="col">{{ $subCategory->category_name }}</td>
+                                <td scope="col">
                                     <a href="/user/admin/subcategories/{{ $subCategory->sub_category_id }}/edit" class="btn btn-sm btn-primary">Edit</a>
                                 </td>
-                                <td>
+                                <td scope="col">
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCategoryModal{{ $loop->index+1 }}">
                                         Delete

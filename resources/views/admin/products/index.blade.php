@@ -88,7 +88,9 @@
                                   <td>{{ $product->product_old_price == '' ? 'None' : $product->product_old_price }}</td>
                                   <td>{{ $product->product_stock }}</td>
                                   <td>{{ $product->product_description }}</td>
-                                  <td>S1, S2, S3, S4</td>
+                                  <td>
+                                    <a href="/user/admin/products/{{ $product->product_id }}/sizes">Add Size</a>
+                                  </td>
                                   <td>C1 - circle with name, C2 - circle with name, C3 - circle with name, C4 - circle with name</td>
                                   <td>
                                     <a href="/user/admin/product/id/reviews">

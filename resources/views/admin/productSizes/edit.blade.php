@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    {{ config('app.name') }} | Admin - Add Product
+    {{ config('app.name') }} | Admin - Add Product Sizes
 @endsection
 
 @section('token')
@@ -13,8 +13,7 @@
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header">
-                <h2 class="pageheader-title">Add Product</h2>
-                <p class="pageheader-text">Step 2</p>
+                <h2 class="pageheader-title">Add Product Sizes</h2>
                 <div class="page-breadcrumb">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
@@ -25,7 +24,7 @@
                                 <a href="/user/admin/products" class="breadcrumb-link">Products</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Add Product
+                                Add Product Sizes
                             </li>
                         </ol>
                     </nav>
@@ -43,7 +42,7 @@
     <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
       <div class="card">
         <h3 class="card-header">
-          <span class="display-7 mr-lg-2">Product Sizes</span> (Step - 2)
+          <span class="display-7 mr-lg-2">Product Sizes</span>
         </h3>
         <div class="card-body">
           @if( session('success') )
@@ -63,15 +62,14 @@
               </div>
           @endif
 
-          <form action="/user/admin/products/add/sizes" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
+          <form action="/user/admin/products/{{ $product_id }}/sizes/{{ $editSize->product_size_id }}" method="post" id="basicform" data-parsley-validate="" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
               <label for="productSize">Product Size :</label>
-              <input id="productSize" type="text" name="product_size" data-parsley-trigger="change" placeholder="Type here..." autocomplete="off" class="form-control">
+              <input id="productSize" type="text" name="product_size" data-parsley-trigger="change" placeholder="Type here..." autocomplete="off" class="form-control" value="{{ $editSize->product_size }}">
             </div>
             <div class="row">
               <div class="col-12">
-                <p class="text-danger mt-1" id="formError" role="alert">
                 </p>
                 @if($errors->any())
                     @foreach($errors->all() as $error)
@@ -80,14 +78,10 @@
                         </p>
                     @endforeach
                 @endif
-                <div class="text-right mb-3 mt-3">
-                  <button type="button" id="addButton" class="btn btn-primary btn-space">Add</button>
-                  <button type="reset" class="btn btn-space btn-light">Reset</button>
-                  <hr>
-                </div>
-                <p class="text-right">
-                  <a href="/user/admin/products/add/cancel" class="btn btn-space btn-secondary">Cancel</a>
-                  <button type="button" id="nextStepButton" class="btn btn-space btn-primary">Next Step</button>
+                <p class="text-right mb-3 mt-3">
+                  <input type="hidden" name="_method" value="PUT">
+                  <button type="submit" class="btn btn-primary btn-space">Update</button>
+                  <a href="/user/admin/products/{{ $product_id }}/sizes" class="btn btn-space btn-light">Cancel</a>
                 </p>
               </div>
             </div>
@@ -101,15 +95,37 @@
           <span class="display-7 mr-lg-2">Sizes</span>
         </h3>
         <div class="card-body" id="sizes">
-          <table class="table table-hover table-borded">
+          <table class="table table-hover table-borded text-center">
             <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Size</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
               </tr>
             </thead>
             <tbody id="sizeTable">
-              
+              @if(count($sizes) > 0)
+                @foreach($sizes as $size)
+                  <tr>
+                    <td scope="col">{{ $loop->index+1 }}</td>
+                    <td scope="col">{{ $size->product_size }}</td>
+                    <td scope="col">
+                      <button type="button" class="btn btn-sm btn-primary" disabled>Edit</button>
+                    </td>
+                    <td scope="col">
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-danger btn-sm" disabled>
+                          Delete
+                      </button>
+                    </td>
+                  </tr>
+                @endforeach
+              @else
+                <tr>
+                  <td colspan="2">No Sizes Found!</td>
+                </tr>
+              @endif
             </tbody>
           </table>
         </div>

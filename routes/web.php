@@ -40,5 +40,8 @@ Route::get('/logout', 'Auth\LoginController@logout');
 // Filtered Sub Categories
 Route::get('/user/admin/subcategories/category/{id}', 'SubCategoriesController@categoryIndex');
 
-// Admin Add Product Deatils Route
+// Admin Products routes
 Route::resource('/user/admin/products', 'ProductsController');
+
+// Admin Product Sizes routes
+Route::resource('/user/admin/products/{product_id}/sizes', 'ProductSizesController');

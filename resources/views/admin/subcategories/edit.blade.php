@@ -78,13 +78,13 @@
                         <tbody>
                         @foreach($subCategories as $subCategory)
                             <tr>
-                                <th scope="row">{{ $loop->index+1 }}</th>
-                                <td>{{ $subCategory->sub_category_name }}</td>
-                                <td>{{ $subCategory->category_name }}</td>
-                                <td>
+                                <td scope="col">{{ $loop->index+1 }}</td>
+                                <td scope="col">{{ $subCategory->sub_category_name }}</td>
+                                <td scope="col">{{ $subCategory->category_name }}</td>
+                                <td scope="col">
                                     <button href="#" class="btn btn-sm btn-primary" disabled>Edit</button>
                                 </td>
-                                <td>
+                                <td scope="col">
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-danger btn-sm" disabled>Delete</button>
                                 </td>
