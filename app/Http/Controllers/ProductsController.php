@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use  App\Product;
+use  App\ProductSize;
 use Webpatser\Uuid\Uuid;
 
 class ProductsController extends Controller
@@ -26,7 +27,12 @@ class ProductsController extends Controller
     public function index()
     {
         $products = Product::orderByDesc('created_at')->get();
-        return view('admin.products.index')->with('products', $products);
+        $productSizes = ProductSize::all();
+        return view('admin.products.index')
+            ->with([
+                'products' => $products,
+                'productSizes' => $productSizes
+            ]);
     }
 
     /**

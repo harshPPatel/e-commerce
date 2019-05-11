@@ -82,39 +82,54 @@
                       <tbody>
                           @foreach($products as $product)
                               <tr>
-                                  <th scope="row">{{ $loop->index+1 }}</th>
-                                  <td>{{ $product->product_name }}</td>
-                                  <td>{{ $product->product_price }}</td>
-                                  <td>{{ $product->product_old_price == '' ? 'None' : $product->product_old_price }}</td>
-                                  <td>{{ $product->product_stock }}</td>
-                                  <td>{{ $product->product_description }}</td>
-                                  <td>
-                                    <a href="/user/admin/products/{{ $product->product_id }}/sizes">Add Size</a>
+                                  <td scope="col">{{ $loop->index+1 }}</td>
+                                  <td scope="col">{{ $product->product_name }}</td>
+                                  <td scope="col">{{ $product->product_price }}</td>
+                                  <td scope="col">{{ $product->product_old_price == '' ? 'None' : $product->product_old_price }}</td>
+                                  <td scope="col">{{ $product->product_stock }}</td>
+                                  <td scope="col">{{ $product->product_description }}</td>
+                                  <td scope="col">
+                                    @php
+                                        $productSize = [];
+                                        foreach($productSizes as $size) {
+                                            if ($size->product_id == $product->product_id) {
+                                                array_push($productSize, $size);
+                                            }
+                                        }
+                                    @endphp
+                                    @foreach($productSize as $size)
+                                        @if( $loop->index+1 == count($productSize) )
+                                            {{ $size->product_size }} <br> 
+                                        @else
+                                            {{ $size->product_size }},{{ " " }} 
+                                        @endif
+                                    @endforeach
+                                    <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/sizes">Add Size</a>
                                   </td>
-                                  <td>C1 - circle with name, C2 - circle with name, C3 - circle with name, C4 - circle with name</td>
-                                  <td>
+                                  <td scope="col">C1 - circle with name, C2 - circle with name, C3 - circle with name, C4 - circle with name</td>
+                                  <td scope="col">
                                     <a href="/user/admin/product/id/reviews">
                                       24
                                     </a>
                                   </td>
-                                  <td>
+                                  <td scope="col">
                                     @if($product->is_featured == 1)
                                       <span class="text-success">Yes</span>
                                     @else
                                       No
                                     @endif
                                   </td>
-                                  <td>
+                                  <td scope="col">
                                     @if($product->is_available == 1)
                                       <span class="text-success">Available</span>
                                     @else
                                       <span class="text-danger">Hidden</span>
                                     @endif
                                   </td>
-                                  <td>
+                                  <td scope="col">
                                       <a href="/user/admin/products/{{ $product->product_id }}/edit" class="btn btn-sm btn-primary">Edit</a>
                                   </td>
-                                  <td>
+                                  <td scope="col">
                                       <!-- Button trigger modal -->
                                       <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deletProductModel{{ $loop->index+1 }}">
                                           Delete
