@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'IsAdmin' => \App\Http\Middleware\IsAdmin::class,
         'isCategoryExists' => \App\Http\Middleware\isCategoryExists::class,
         'isProductExists' => \App\Http\Middleware\isProductExists::class,
+        'isProductSizesExists' => \App\Http\Middleware\isProductSizesExists::class,
     ];
 
     /**

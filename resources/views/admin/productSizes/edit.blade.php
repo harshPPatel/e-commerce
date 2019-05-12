@@ -18,13 +18,16 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="#" class="breadcrumb-link">Dashboard</a>
-                              </li>
-                              <li class="breadcrumb-item active" aria-current="page">
-                                <a href="/user/admin/products" class="breadcrumb-link">Products</a>
+                              <a href="#" class="breadcrumb-link">Dashboard</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">
-                                Add Product Sizes
+                              <a href="/user/admin/products" class="breadcrumb-link">Products</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                              <a href="/user/admin/products/{{ $product_id }}/sizes" class="breadcrumb-link">Product Sizes</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Edit Product Sizes
                             </li>
                         </ol>
                     </nav>
