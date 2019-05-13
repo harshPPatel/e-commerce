@@ -113,6 +113,8 @@ class SubCategoriesController extends Controller
         // Fetching Sub Category to be edited
         $subCategory = SubCategory::find($id);
 
+        dd($subCategory, $subCategory->category);
+
         // returning view with variables
         return view('admin.subcategories.edit')
             ->with([

@@ -31,6 +31,6 @@ class SubCategory extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo The name of related modal.
      */
     public function category() {
-        return $this->belongsTo('App\Category');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

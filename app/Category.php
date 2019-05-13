@@ -31,6 +31,6 @@ class Category extends Model
      * @return \Illuminate\Database\Eloquent\Relations\HasMany The name of related modal
      */
     public function subCategories() {
-        return $this->hasMany('App\SubCategory', 'category_id');
+        return $this->hasMany(SubCategory::class);
     }
 }
