@@ -80,7 +80,7 @@
                             <tr>
                                 <td scope="col">{{ $loop->index+1 }}</td>
                                 <td scope="col">{{ $subCategory->sub_category_name }}</td>
-                                <td scope="col">{{ $subCategory->category_name }}</td>
+                                <td scope="col">{{ $subCategory->category->category_name }}</td>
                                 <td scope="col">
                                     <button href="#" class="btn btn-sm btn-primary" disabled>Edit</button>
                                 </td>

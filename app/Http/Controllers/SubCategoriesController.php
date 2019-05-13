@@ -32,7 +32,7 @@ class SubCategoriesController extends Controller
         $categories = Category::all();
 
         // Fetching all sub categories
-        $subCategories = $this->getAllSubCategories();
+        $subCategories = SubCategory::all();
 
         // Rendering the view with sub categories
         return view('admin.subcategories.index')
@@ -61,8 +61,8 @@ class SubCategoriesController extends Controller
     public function store(Request $request)
     {
         // Validating the request
-        $this->validate($request, [
-            'sub_category_name'=> 'required',
+        $data = $request->validate([
+            'sub_category_name' => 'required',
             'category_id' => 'required',
         ]);
 
@@ -71,8 +71,8 @@ class SubCategoriesController extends Controller
 
         // Setting variables of subCategory
         $subCategory->sub_category_id = $this->createUniqueId();
-        $subCategory->sub_category_name = $request->sub_category_name;
-        $subCategory->category_id = $request->category_id;
+        $subCategory->sub_category_name = $data['sub_category_name'];
+        $subCategory->category_id = $data['category_id'];
 
         // Validating if same category exists in sub_categories table for same parent category.
         if($this->isSubCategoryExists($subCategory)) {
@@ -108,12 +108,10 @@ class SubCategoriesController extends Controller
     public function edit($id)
     {
         // Fetching all sub categories
-        $subCategories = $this->getAllSubCategories();
+        $subCategories = SubCategory::all();
 
         // Fetching Sub Category to be edited
         $subCategory = SubCategory::find($id);
-
-        dd($subCategory, $subCategory->category);
 
         // returning view with variables
         return view('admin.subcategories.edit')
@@ -134,7 +132,7 @@ class SubCategoriesController extends Controller
     public function update(Request $request, $id)
     {
         // Validating the request
-        $this->validate($request, [
+        $validatedData = $request->validate([
             'sub_category_name'=> 'required',
             'category_id' => 'required'
         ]);
@@ -143,19 +141,19 @@ class SubCategoriesController extends Controller
         $subCategory = SubCategory::find($id);
 
         // Updating values
-        $subCategory->sub_category_name = $request->sub_category_name;
-        $subCategory->category_id = $request->category_id;
+        $subCategory->sub_category_name = $validatedData['sub_category_name'];
+        $subCategory->category_id = $validatedData['category_id'];
 
         // Checking if the sub category with same name exist or not inside selected parent category
-        if($this->isSubCategoryExists()) {
+        if($this->isSubCategoryExists($subCategory)) {
             // Redirecting to the sub categories index page with error message
             return redirect('/user/admin/subcategories')
                 ->with('error', 'Sub Category already exists in selected parent Category..');
         } 
         else {
-            // Saving sub category
-            $subCategory->save();
-
+            // Updating sub category
+            $subCategory->update();
+                
             // Redirecting to the sub categories index page with success message
             return redirect('/user/admin/subcategories')
                 ->with('success', 'Sub Category Edited.');
@@ -190,10 +188,8 @@ class SubCategoriesController extends Controller
         $categories = Category::all();
 
         // Fetching all sub categories with category name
-        $subCategories = DB::table('sub_categories')
-            ->join('categories', 'sub_categories.category_id', '=', 'categories.category_id')
-            ->select('sub_categories.*', 'categories.category_name')
-            ->where('sub_categories.category_id', '=', $id)
+        $subCategories = SubCategory
+            ::where('category_id', '=', $id)
             ->get();
 
         // Fetching Parent Category Name
@@ -206,18 +202,6 @@ class SubCategoriesController extends Controller
                 'categories' => $categories,
                 'pageHeading' => $parentCategory,
             ]);
-    }
-
-    /**
-     * Returns all sub categories with category name
-     *
-     * @return array Array of all sub categories
-     */
-    private function getAllSubCategories() {
-        return DB::table('sub_categories')
-            ->join('categories', 'sub_categories.category_id', '=', 'categories.category_id')
-            ->select('sub_categories.*', 'categories.category_name')
-            ->get();
     }
 
     /**
