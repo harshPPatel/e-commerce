@@ -18,6 +18,7 @@ class SubCategoriesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('isSubCategoryExists');
     }
 
     /**
@@ -31,24 +32,14 @@ class SubCategoriesController extends Controller
         $categories = Category::all();
 
         // Fetching all sub categories
-        $subCategories = DB::table('sub_categories')
-            ->join('categories', 'sub_categories.category_id', '=', 'categories.category_id')
-            ->select('sub_categories.*', 'categories.category_name')
-            ->get();
+        $subCategories = $this->getAllSubCategories();
 
-        // Checking if any Parent Category is available or not
-        if ($categories->count() > 0) {
-            // Rendering the view with sub categories
-            return view('admin.subcategories.index')
-                ->with([
-                    'subCategories' => $subCategories,
-                    'categories' => $categories,
-                ]);
-        } else {
-            // Redirecting to Categories with Error
-            return redirect('/user/admin/categories')->with('error', 'Add Category first to create Sub Categories.');
-        }
-
+        // Rendering the view with sub categories
+        return view('admin.subcategories.index')
+            ->with([
+                'subCategories' => $subCategories,
+                'categories' => $categories,
+            ]);
     }
 
     /**
@@ -78,33 +69,22 @@ class SubCategoriesController extends Controller
         // Creating Category Object
         $subCategory = new SubCategory;
 
-        // Generating UUID for Subcategory.
-        $uniqueId = Uuid::generate(4);
-
-        // Checking if unique id already exists or not. If it does than recreating the unique id.
-        if(SubCategory::find($uniqueId)) {
-            $uniqueId = Uuid::generate(4);
-        }
-
         // Setting variables of subCategory
-        $subCategory->sub_category_id = $uniqueId;
+        $subCategory->sub_category_id = $this->createUniqueId();
         $subCategory->sub_category_name = $request->sub_category_name;
         $subCategory->category_id = $request->category_id;
 
         // Validating if same category exists in sub_categories table for same parent category.
-        if(SubCategory::
-            where([
-                ['sub_category_name', 'LIKE', $subCategory->sub_category_name],
-                ['category_id', '=', $subCategory->category_id]
-            ])->exists()) {
-            return redirect('/user/admin/subcategories')->with('error', 'Sub Category already exists.');
+        if($this->isSubCategoryExists($subCategory)) {
+            return redirect('/user/admin/subcategories')
+                ->with('error', 'Sub Category already exists.');
         } else {
-
             // Saving sub category
             $subCategory->save();
 
             // Redirecting to subcategories page with success message.
-            return redirect('/user/admin/subcategories')->with('success', 'Sub Category Added.');
+            return redirect('/user/admin/subcategories')
+                ->with('success', 'Sub Category Added.');
         }
     }
 
@@ -128,10 +108,7 @@ class SubCategoriesController extends Controller
     public function edit($id)
     {
         // Fetching all sub categories
-        $subCategories = DB::table('sub_categories')
-            ->join('categories', 'sub_categories.category_id', '=', 'categories.category_id')
-            ->select('sub_categories.*', 'categories.category_name')
-            ->get();
+        $subCategories = $this->getAllSubCategories();
 
         // Fetching Sub Category to be edited
         $subCategory = SubCategory::find($id);
@@ -168,15 +145,18 @@ class SubCategoriesController extends Controller
         $subCategory->category_id = $request->category_id;
 
         // Checking if the sub category with same name exist or not inside selected parent category
-        if(SubCategory
-            ::where([
-                ['sub_category_name', 'LIKE', $subCategory->sub_category_name],
-                ['category_id' , '=', $subCategory->category_id]
-                ])->exists()) {
-            return redirect('/user/admin/subcategories')->with('error', 'Sub Category already exists in selected parent Category..');
-        } else {
+        if($this->isSubCategoryExists()) {
+            // Redirecting to the sub categories index page with error message
+            return redirect('/user/admin/subcategories')
+                ->with('error', 'Sub Category already exists in selected parent Category..');
+        } 
+        else {
+            // Saving sub category
             $subCategory->save();
-            return redirect('/user/admin/subcategories')->with('success', 'Sub Category Edited.');
+
+            // Redirecting to the sub categories index page with success message
+            return redirect('/user/admin/subcategories')
+                ->with('success', 'Sub Category Edited.');
         }
     }
 
@@ -188,7 +168,14 @@ class SubCategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Finding the sub category
+        $subCategory = SubCategory::find($id);
+
+        // Deleting the sub category
+        $subCategory->delete();
+
+        // Redirecting to the same page with success message
+        return redirect()->back()->with('success', 'Sub Category deleted successfully!');
     }
 
     /**
@@ -210,18 +197,56 @@ class SubCategoriesController extends Controller
         // Fetching Parent Category Name
         $parentCategory = Category::find($id)->category_name;
 
-        // Checking if any Parent Category is available or not
-        if ($categories->count() > 0) {
-            // Rendering the view with sub categories
-            return view('admin.subcategories.index')
-                ->with([
-                    'subCategories' => $subCategories,
-                    'categories' => $categories,
-                    'pageHeading' => $parentCategory,
-                ]);
-        } else {
-            // Redirecting to Categories with Error
-            return redirect('/user/admin/categories')->with('error', 'Category Does not exists. Add Category first.');
+        // Rendering the view with variables
+        return view('admin.subcategories.index')
+            ->with([
+                'subCategories' => $subCategories,
+                'categories' => $categories,
+                'pageHeading' => $parentCategory,
+            ]);
+    }
+
+    /**
+     * Returns all sub categories with category name
+     *
+     * @return array Array of all sub categories
+     */
+    private function getAllSubCategories() {
+        return DB::table('sub_categories')
+            ->join('categories', 'sub_categories.category_id', '=', 'categories.category_id')
+            ->select('sub_categories.*', 'categories.category_name')
+            ->get();
+    }
+
+    /**
+     * Creates unique id for the primary key field of sub category. It also checks to the dataase that if any other sub category with the same unique Id exists, it regenrates the uniqueId.
+     *
+     * @return string uniqueId
+     */
+    private function createUniqueId() {
+        // Generating UUID for Subcategory.
+        $uniqueId = Uuid::generate(4);
+
+        // Checking if unique id already exists or not. If it does than recreating the unique id.
+        if(SubCategory::find($uniqueId)) {
+            createUniqueId();
         }
+
+        // Returning the unique id
+        return $uniqueId;
+    }
+
+    /**
+     * Checks if sub category already exists in database with same name and for same parent category
+     *
+     * @param SubCategory $subCategory - Sub category to compare in database
+     * @return boolean true if it exists, false otherwise
+     */
+    private function isSubCategoryExists($subCategory) {
+        return SubCategory
+            ::where([
+                ['sub_category_name', 'LIKE', $subCategory->sub_category_name],
+                ['category_id', '=', $subCategory->category_id]
+            ])->exists();
     }
 }
