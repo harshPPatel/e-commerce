@@ -81,7 +81,7 @@
                                 <td>
                                     <a href="/user/admin/subcategories/category/{{ $category->category_id }}">
                                         <div>
-                                            {{ $category->sub_category_count }}
+                                            {{ count($category->subCategories) }}
                                         </div>
                                     </a>
                                 </td>

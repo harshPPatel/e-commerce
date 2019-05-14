@@ -6,7 +6,6 @@ use App\SubCategory;
 use Illuminate\Http\Request;
 use App\Category;
 use Webpatser\Uuid\Uuid;
-use Illuminate\Support\Facades\DB;
 
 class CategoriesController extends Controller
 {
@@ -29,7 +28,7 @@ class CategoriesController extends Controller
     public function index()
     {
         // Fetching all categories from Category Modal
-        $categories = $this->getAllCategories();
+        $categories = Category::all();
 
         // Returning to category view with the value of all categories.
         return view('admin.categories.index')
@@ -54,8 +53,8 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        // Validating the request
-        $this->validate($request, [
+        // Validating the request saving valid data
+        $validData = $request->validate([
             'category_name'=> 'required'
         ]);
 
@@ -64,18 +63,21 @@ class CategoriesController extends Controller
         
         // Setting values
         $category->category_id = $this->createUniqueId();
-        $category->category_name = $request->category_name;
+        $category->category_name = $validData['category_name'];
 
         // Checking if the category with same name exist or not
-        if(Category::where('category_name', 'LIKE', $category->category_name)->exists()) {
+        if($this->isCategoryExists($category)) {
             // Redirecting to the categories index page with error message
-            return redirect('/user/admin/categories')->with('error', 'Category already exists.');
+            return redirect('/user/admin/categories')
+                ->with('error', 'Category already exists.');
         } 
         else {
             // Saving category
             $category->save();
+
             // Redirecting to the categories index page with success message
-            return redirect('/user/admin/categories')->with('success', 'Category Added.');
+            return redirect('/user/admin/categories')
+                ->with('success', 'Category Added.');
         }
     }
 
@@ -99,7 +101,7 @@ class CategoriesController extends Controller
     public function edit($id)
     {
         // Fetching all categories from Category Modal
-        $categories = $this->getAllCategories();
+        $categories = Category::all();
 
         // Finding category to edit
         $category = Category::find($id);
@@ -110,7 +112,6 @@ class CategoriesController extends Controller
                 'categories' => $categories,
                 'category' => $category
             ]);
-
     }
 
     /**
@@ -123,7 +124,7 @@ class CategoriesController extends Controller
     public function update(Request $request, $id)
     {
         // Validating the request
-        $this->validate($request, [
+        $validData = $request->validate([
             'category_name'=> 'required'
         ]);
 
@@ -131,18 +132,21 @@ class CategoriesController extends Controller
         $category = Category::find($id);
 
         // Updating fields
-        $category->category_name = $request->category_name;
+        $category->category_name = $validData['category_name'];
 
         // Checking if the category with same name exist or not
-        if(Category::where('category_name', 'LIKE', $category->category_name)->exists()) {
+        if($this->isCategoryExists($category)) {
             // Redirecting to the categories index page with error message
-            return redirect('/user/admin/categories')->with('error', 'Category already exists.');
+            return redirect('/user/admin/categories')
+                ->with('error', 'Category already exists.');
         } 
         else {
-            // Saving category
-            $category->save();
+            // Updating category
+            $category->update();
+
             // Redirecting to the categories index page with success message
-            return redirect('/user/admin/categories')->with('success', 'Category Edited.');
+            return redirect('/user/admin/categories')
+                ->with('success', 'Category Edited.');
         }
     }
 
@@ -156,26 +160,13 @@ class CategoriesController extends Controller
     {
         // Finding Category
         $category = Category::find($id);
+
         // Deleting Category
         $category->delete();
 
         // Redirecting to categories index page with success message
-        return redirect('/user/admin/categories')->with('success', 'Category Deleted.');
-    }
-
-    /**
-     * Returns all categories.
-     *
-     * @return array Array of all categories
-     */
-    private function getAllCategories() {
-        return DB::table('categories')
-            ->join('sub_categories', 'categories.category_id', '=', 'sub_categories.category_id', 'left outer')
-            ->select('categories.category_id', 
-                'categories.category_name', 
-                DB::raw('(CASE WHEN COUNT(sub_categories.sub_category_id) IS NULL THEN "0" ELSE COUNT(sub_categories.sub_category_id) END) AS "sub_category_count"'))
-            ->groupBy(['category_id', 'category_name'])
-            ->get();
+        return redirect('/user/admin/categories')
+            ->with('success', 'Category Deleted.');
     }
 
     /**
@@ -195,5 +186,17 @@ class CategoriesController extends Controller
 
         // Returning the unique Id
         return $uniqueId;
+    }
+
+    /**
+     * Checks if the provided category already exists in the database or not
+     *
+     * @param Category $category - Category to compare to the database
+     * @return boolean true, if the category already exists, false otehrwise.
+     */
+    private function isCategoryExists($category){
+        return Category
+            ::where('category_name', 'LIKE', $category->category_name)
+            ->exists();
     }
 }

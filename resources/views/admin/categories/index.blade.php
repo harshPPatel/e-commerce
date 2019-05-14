@@ -89,7 +89,7 @@
                                     <td scope="col">
                                         <a href="/user/admin/subcategories/category/{{ $category->category_id }}" style="text-decoration: underline;">
                                             <div style="width: 100%; height: 100%">
-                                                {{ $category->sub_category_count }}
+                                                {{ count($category->subCategories) }}
                                             </div>
                                         </a>
                                     </td>
