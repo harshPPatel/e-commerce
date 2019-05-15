@@ -101,8 +101,8 @@
                 <div class="col-md-4">
                   <label for="productIsFeature">Is Featured?</label>
                   <select id="productIsFeature" name="is_featured" autocomplete="off" class="form-control">
-                    <option value="true">Yes</option>
-                    <option value="false" selected>No</option>
+                    <option value="1">Yes</option>
+                    <option value="0" selected>No</option>
                   </select>
                 </div>
               </div>
@@ -112,8 +112,8 @@
                 <div class="col-md-4">
                   <label for="productIsAvailable">Product Status</label>
                   <select id="productIsAvailable" name="is_available" autocomplete="off" class="form-control">
-                    <option value="true" selected>Available</option>
-                    <option value="false">Hidden</option>
+                    <option value="1" selected>Available</option>
+                    <option value="0">Hidden</option>
                   </select>
                 </div>
               </div>

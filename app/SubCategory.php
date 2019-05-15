@@ -33,4 +33,13 @@ class SubCategory extends Model
     public function category() {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    /**
+     * Creates hasMany relation with Product Modal
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany The products belongs to the sub category 
+     */
+    public function products() {
+        return $this->hasMany(Product::class, 'sub_category_id');
+    }
 }

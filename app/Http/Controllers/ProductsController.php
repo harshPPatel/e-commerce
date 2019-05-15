@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\DB;
+
 use Illuminate\Http\Request;
 use Webpatser\Uuid\Uuid;
-use  App\Product;
-use  App\ProductSize;
-use  App\Category;
-use  App\SubCategory;
+use App\Product;
+use App\Category;
+use App\SubCategory;
 
 class ProductsController extends Controller
 {
@@ -31,16 +30,12 @@ class ProductsController extends Controller
     {
         // Fetching all products in descending order of the time they were created
         // $products = Product::orderByDesc('created_at')->get();
-        $products = $this->getAllProducts();
-
-        // Fetching all sizes of products
-        $productSizes = ProductSize::all();
+        $products = Product::all();
         
         // Returning the view with variables
         return view('admin.products.index')
             ->with([
-                'products' => $products,
-                'productSizes' => $productSizes
+                'products' => $products
             ]);
     }
 
@@ -74,11 +69,15 @@ class ProductsController extends Controller
     public function store(Request $request)
     {
         // Validating the request
-        $this->validate($request, [
-            'product_name'=> 'required',
-            'product_price'=> 'required',
-            'product_description'=> 'required',
-            'product_stock'=> 'required',
+        $validData = $request->validate([
+            'product_name' => ['required', 'string', 'max:255'],
+            'product_price' => ['required', 'numeric'],
+            'product_description' => ['required', 'string'],
+            'product_stock' => ['required', 'numeric'],
+            'is_featured' => ['required', 'boolean'],
+            'is_available' => ['required', 'boolean'],
+            'product_video' => ['mimetypes:video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/s-ms-wmv,video/mpeg,video/avi'],
+            'sub_category_id' => ['required', 'string'],
         ]);
 
         // Creating new Product
@@ -86,13 +85,13 @@ class ProductsController extends Controller
 
         // Setting values of Product
         $product->product_id = $this->createUniqueId();
-        $product->product_name = $request->product_name;
-        $product->product_price = $request->product_price;
-        $product->product_description = $request->product_description;
-        $product->product_stock = $request->product_stock;
-        $product->is_featured = $request->is_featured == 'true' ? true : false;
-        $product->is_available = $request->is_available == 'true' ? true : false;
-        $product->product_video = $request->product_video;
+        $product->product_name = $validData['product_name'];
+        $product->product_price = $valiData['product_price'];
+        $product->product_description = $valiData['product_description'];
+        $product->product_stock = $validDate['product_stock'];
+        $product->is_featured = $validData['is_featured'];
+        $product->is_available = $validData['is_available'];
+        $product->product_video = $validData['product_video'];
         $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id) 
             ? $request->sub_category_id 
             : env('OTHERS_SUB_CATEGORY_ID');
@@ -104,7 +103,8 @@ class ProductsController extends Controller
         ])->exists()) {
 
             // Redericting the page with error message
-            return redirect('/user/admin/products')->with('error', 'Product already exists in the store!');
+            return redirect('/user/admin/products')
+                ->with('error', 'Product already exists in the store!');
 
         } else {
             // Saving the product in database.
@@ -182,13 +182,14 @@ class ProductsController extends Controller
         $product->is_available = $request->is_available == 'true' ? true : false;
         $product->product_video = $request->product_video;
         $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id)
-            ? $request->sub_category_id
+            ? $validData['sub_category_id']
             : env('OTHERS_SUB_CATEGORY_ID');
 
         // Checking if the product already exists with same product name in the same sub category or not
         if ($this->isEditedProductExists($request, $product)) {
             // Redericting the page with error message
-            return redirect('/user/admin/products')->with('error', 'Product already exists in the store!');
+            return redirect('/user/admin/products')
+                ->with('error', 'Product already exists in the store!');
         } 
         else {
             // Updating name of product after validation
@@ -266,24 +267,10 @@ class ProductsController extends Controller
      * @return boolean true if the product with same name in the same category exists; false if it does not.
      */
     private function isEditedProductExists($request, $product) {
-        return $request->product_name != $product->product_name 
+        return $validData['product_name'] != $product->product_name 
             && Product::where([
                 ['product_name', 'LIKE', $request->product_name],
                 ['sub_category_id', '=', $product->sub_category_id]
             ])->exists();
-    }
-
-    /**
-     * Gets all products with category and sub categories name
-     *
-     * @return array Array of all products
-     */
-    private function getAllProducts() {
-        return DB::table('products')
-            ->join('sub_categories', 'products.sub_category_id', '=', 'sub_categories.sub_category_id')
-            ->join('categories', 'categories.category_id', '=', 'sub_categories.category_id')
-            ->select('products.*', 'categories.category_name', 'sub_categories.sub_category_name')
-            ->orderBy('created_at', 'desc')
-            ->get();
     }
 }
