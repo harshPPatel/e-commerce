@@ -60,7 +60,7 @@ class ProductSizesController extends Controller
     public function store(Request $request, $product_id)
     {
         // Validating the input
-        $this->validate($request, [
+        $validData = $request->validate([
             'product_size' => 'required',
         ]);
 
@@ -69,13 +69,13 @@ class ProductSizesController extends Controller
 
         // Adding column values
         $size->product_size_id = $this->createUniqueId();
-        $size->product_size = strtoupper($request->product_size);
+        $size->product_size = strtoupper($validData['product_size']);
         $size->product_id = $product_id;
 
         // Checking if the size already exists or not
         if($this->isSizeExists($size, $product_id)) {
             // Redericting the page with error message
-            return redirect("/user/admin/products/{$product_id}/sizes")
+            return back()
                 ->with('error', 'Size for provided product already exists!');
 
         } else {
@@ -83,7 +83,7 @@ class ProductSizesController extends Controller
             $size->save();
             
             // Redericting the page with success message
-            return redirect("/user/admin/products/{$product_id}/sizes")
+            return back()
                 ->with('success', 'Size added to the system successfully.');
         }
     }
@@ -135,7 +135,7 @@ class ProductSizesController extends Controller
     public function update(Request $request, $product_id, $id)
     {
         // Validating the request
-        $this->validate($request, [
+        $validData = $request->validate([
             'product_size'=> 'required'
         ]);
 
@@ -143,20 +143,20 @@ class ProductSizesController extends Controller
         $size = ProductSize::find($id);
 
         // Setting the values
-        $size->product_size = strtoupper($request->product_size);
+        $size->product_size = strtoupper($validData['product_size']);
 
         // Checking if the category with same name exist or not
         if($this->isSizeExists($size, $product_id)) {
             // redirecting to the sizes page of product with error message
-            return redirect("/user/admin/products/{$product_id}/sizes")
+            return back()
                 ->with('error', 'Size already exists for the product.');
         } 
         else {
             // saving the size
-            $size->save();
+            $size->update();
 
             // redirecting to the sizes page of product with success message
-            return redirect("/user/admin/products/{$product_id}/sizes")
+            return redirect("user/admin/products/{$product_id}/sizes")
                 ->with('success', 'Size updated successfully.');
         }
     }
@@ -176,7 +176,7 @@ class ProductSizesController extends Controller
         $size->delete();
 
         // Returning to the products' sizes index page with success message
-        return redirect("/user/admin/products/{$product_id}/sizes")
+        return back()
             ->with('success', 'Product deleted successfully.');
     }
 

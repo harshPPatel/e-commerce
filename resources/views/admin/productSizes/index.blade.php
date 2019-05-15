@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    {{ config('app.name') }} | Admin - Add Product Sizes
+    {{ config('app.name') }} | Admin - Product Sizes
 @endsection
 
 @section('token')
@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="page-header">
-                <h2 class="pageheader-title">Add Product Sizes</h2>
+              <h2 class="pageheader-title">Product Sizes</h2>
                 <div class="page-breadcrumb">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">

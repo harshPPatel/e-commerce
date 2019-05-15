@@ -61,7 +61,7 @@
                 </div>
               @endif
               @if(count($products) > 0)
-                  <table class="table table-hover table-bordered">
+                  <table class="table table-hover table-bordered table-responsive">
                       <thead>
                       <tr>
                           <th scope="col">#</th>
