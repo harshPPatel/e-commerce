@@ -40,6 +40,6 @@ class Product extends Model
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo Sub category to which the product belongs to
      */
     public function productSubCategory() {
-        return $this->belongsTo(SubCategory::class, 'sub_category_id');
+        return $this->belongsTo(SubCategory::class, 'product_id');
     }
 }

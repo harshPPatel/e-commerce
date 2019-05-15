@@ -88,11 +88,15 @@
                                 <td scope="col">{{ $subCategory->sub_category_name }}</td>
                                 <td scope="col">{{ $subCategory->category->category_name }}</td>
                                 <td scope="col">
+                                    @if ($subCategory->sub_category_id == env('OTHERS_SUB_CATEGORY_ID'))
+                                        <button href="#" class="btn btn-sm btn-primary" disabled>Edit</button>
+                                    @else
                                     <a href="/user/admin/subcategories/{{ $subCategory->sub_category_id }}/edit" class="btn btn-sm btn-primary">Edit</a>
+                                    @endif
                                 </td>
                                 <td scope="col">
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCategoryModal{{ $loop->index+1 }}">
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteCategoryModal{{ $loop->index+1 }}" {{ $subCategory->sub_category_id == env('OTHERS_SUB_CATEGORY_ID') ? 'disabled' : '' }}>
                                         Delete
                                     </button>
                                     <!-- Delete category modal -->
@@ -113,7 +117,7 @@
                                                     <form action="/user/admin/subcategories/{{ $subCategory->sub_category_id }}" method="POST">
                                                         @csrf
                                                         <input type="hidden" name="_method" value="DELETE">
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        <button type="submit" class="btn btn-danger" {{ $subCategory->sub_category_id == env('OTHERS_SUB_CATEGORY_ID') ? 'disabled' : '' }}>Delete</button>
                                                     </form>
                                                 </div>
                                             </div>

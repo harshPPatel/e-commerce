@@ -31,6 +31,6 @@ class ProductSize extends Model
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo Product to whom the size belongs to
      */
     public function product() {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::class, 'product_size_id');
     }
 }

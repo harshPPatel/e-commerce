@@ -112,6 +112,13 @@ class SubCategoriesController extends Controller
 
         // Fetching Sub Category to be edited
         $subCategory = SubCategory::find($id);
+        
+        // Checking if provided id is not Other Subcategories id
+        if ($subCategory->sub_category_id == env('OTHERS_SUB_CATEGORY_ID')) {
+            // returning back with error
+            return back()
+                ->with('error', 'You Can not edit this Category!');
+        }
 
         // returning view with variables
         return view('admin.subcategories.edit')
@@ -170,6 +177,12 @@ class SubCategoriesController extends Controller
     {
         // Finding the sub category
         $subCategory = SubCategory::find($id);
+
+        // Checking if provided id is not Other Subcategories id
+        if ($subCategory->sub_category_id == env('OTHERS_SUB_CATEGORY_ID')) {
+            // returning back with error
+            return back()->with('error', 'You Can not delete this Category!');
+        }
 
         // Deleting the sub category
         $subCategory->delete();

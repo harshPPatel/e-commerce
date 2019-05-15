@@ -91,19 +91,14 @@
                                   <td scope="col">{{ $product->product_stock }}</td>
                                   <td scope="col">{{ $product->product_description }}</td>
                                   <td scope="col">
-                                    @php
-                                        $productSize = [];
-                                        foreach($productSizes as $size) {
-                                            if ($size->product_id == $product->product_id) {
-                                                array_push($productSize, $size);
-                                            }
-                                        }
-                                    @endphp
-                                    @if (count($productSize) > 0) 
+                                      @php
+                                        // dd($product->productSizes) ;  
+                                      @endphp
+                                    @if (count($product->productSizes) > 0)
                                         <a href="/user/admin/products/{{ $product->product_id }}/sizes">
                                             <div>
-                                                @foreach($productSize as $size)
-                                                    @if( $loop->index+1 == count($productSize) )
+                                                @foreach($product->productSizes as $size)
+                                                    @if( $loop->index+1 == count($product->productSizes) )
                                                         {{ $size->product_size }} <br> 
                                                     @else
                                                         {{ $size->product_size }},{{ " " }} 

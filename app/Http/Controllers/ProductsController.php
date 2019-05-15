@@ -86,21 +86,22 @@ class ProductsController extends Controller
         // Setting values of Product
         $product->product_id = $this->createUniqueId();
         $product->product_name = $validData['product_name'];
-        $product->product_price = $valiData['product_price'];
-        $product->product_description = $valiData['product_description'];
-        $product->product_stock = $validDate['product_stock'];
+        $product->product_price = $validData['product_price'];
+        $product->product_description = $validData['product_description'];
+        $product->product_stock = $validData['product_stock'];
         $product->is_featured = $validData['is_featured'];
         $product->is_available = $validData['is_available'];
-        $product->product_video = $validData['product_video'];
+        $product->product_video = $request->product_video
+            ? $validData['product_video'] 
+            : null;
+
+        // Cehcking if provided sub category exists or not. If not than sets by default to Other Sub Category
         $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id) 
             ? $request->sub_category_id 
             : env('OTHERS_SUB_CATEGORY_ID');
 
         // Cheking if product with same name exists or not
-        if(Product::where([
-            ['product_name', 'LIKE', $product->product_name],
-            ['sub_category_id', '=', $product->sub_category_id]
-        ])->exists()) {
+        if($this->isProductExists($product)) {
 
             // Redericting the page with error message
             return redirect('/user/admin/products')
@@ -163,26 +164,34 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
         // Validating the request
-        $this->validate($request, [
-            'product_name'=> 'required',
-            'product_price'=> 'required',
-            'product_description'=> 'required',
-            'product_stock'=> 'required',
+        $validData = $request->validate([
+            'product_name' => ['required', 'string', 'max:255'],
+            'product_price' => ['required', 'numeric'],
+            'product_description' => ['required', 'string'],
+            'product_stock' => ['required', 'numeric'],
+            'is_featured' => ['required', 'boolean'],
+            'is_available' => ['required', 'boolean'],
+            'product_video' => ['mimetypes:video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/s-ms-wmv,video/mpeg,video/avi'],
+            'sub_category_id' => ['required', 'string'],
         ]);
 
-        // Creating new Product
+        // Finding Product
         $product = Product::find($id);
 
         // Setting values of Product
-        $product->product_old_price = $request->product_price != $product->product_price && $request->product_price > $product->product_price && $request->product_price > $product->product_old_price ? $product->product_price : '0';
-        $product->product_price = $request->product_price;
-        $product->product_description = $request->product_description;
-        $product->product_stock = $request->product_stock;
-        $product->is_featured = $request->is_featured == 'true' ? true : false;
-        $product->is_available = $request->is_available == 'true' ? true : false;
-        $product->product_video = $request->product_video;
-        $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id)
-            ? $validData['sub_category_id']
+        $product->product_old_price = $this->getProductOldPrice($validData, $product);
+        $product->product_price = $validData['product_price'];
+        $product->product_description = $validData['product_description'];
+        $product->product_stock = $validData['product_stock'];
+        $product->is_featured = $validData['is_featured'];
+        $product->is_available = $validData['is_available'];
+        $product->product_video = $request->product_video
+            ? $validData['product_video'] 
+            : null;
+
+        // Cehcking if provided sub category exists or not. If not than sets by default to Other Sub Category
+        $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id) 
+            ? $request->sub_category_id 
             : env('OTHERS_SUB_CATEGORY_ID');
 
         // Checking if the product already exists with same product name in the same sub category or not
@@ -193,7 +202,7 @@ class ProductsController extends Controller
         } 
         else {
             // Updating name of product after validation
-            $product->product_name = $request->product_name;
+            $product->product_name = $validData['product_name'];
 
             // Saving the product in database.
             $product->save();
@@ -260,6 +269,19 @@ class ProductsController extends Controller
     }
 
     /**
+     * Checks if the product already exists in the database or not
+     *
+     * @param Product $product - product to check in database
+     * @return true if product already exists, false otherwise
+     */
+    private function isProductExists($product) {
+        return Product::where([
+                ['product_name', 'LIKE', $product->product_name],
+                ['sub_category_id', '=', $product->sub_category_id]
+            ])->exists();
+    }
+
+    /**
      * Checks if the edited product already exists in the database or not
      *
      * @param Request $request
@@ -267,10 +289,23 @@ class ProductsController extends Controller
      * @return boolean true if the product with same name in the same category exists; false if it does not.
      */
     private function isEditedProductExists($request, $product) {
-        return $validData['product_name'] != $product->product_name 
-            && Product::where([
-                ['product_name', 'LIKE', $request->product_name],
-                ['sub_category_id', '=', $product->sub_category_id]
-            ])->exists();
+        return ($validData['product_name'] != $product->product_name)
+            && $this->isProductExists($product);
+    }
+
+    /**
+     * Gets the old price for the product. It sets the value if the new price is greater than previous price of product as well as previous old price of product
+     *
+     * @param Request $request - validated data from the request
+     * @param Product $product - product created after validation
+     * @return string value of old price for the product
+     */
+    private function getProductOldPrice($validData, $product) {
+        return (
+            ($validData['product_price'] != $product->product_price)
+            && ($request->product_price > $product->product_price) 
+            && ($request->product_price > $product->product_old_price)) 
+        ? $product->product_price 
+        : '0';
     }
 }
