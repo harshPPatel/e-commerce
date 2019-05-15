@@ -107,8 +107,8 @@
                 <div class="col-md-4">
                   <label for="productIsFeature">Is Featured?</label>
                   <select id="productIsFeature" name="is_featured" autocomplete="off" class="form-control">
-                    <option value="true" {{ $product->is_featured == '1' ? 'selected' : '' }}>Yes</option>
-                    <option value="false" {{ $product->is_featured == '0' ? 'selected' : '' }}>No</option>
+                    <option value="1" {{ $product->is_featured == '1' ? 'selected' : '' }}>Yes</option>
+                    <option value="0" {{ $product->is_featured == '0' ? 'selected' : '' }}>No</option>
                   </select>
                 </div>
               </div>
@@ -118,8 +118,8 @@
                 <div class="col-md-4">
                   <label for="productIsAvailable">Product Status</label>
                   <select id="productIsAvailable" name="is_available" autocomplete="off" class="form-control">
-                    <option value="true" {{ $product->is_available == '1' ? 'selected' : '' }}>Available</option>
-                    <option value="false" {{ $product->is_available == '0' ? 'selected' : '' }}>Hidden</option>
+                    <option value="1" {{ $product->is_available == '1' ? 'selected' : '' }}>Available</option>
+                    <option value="0" {{ $product->is_available == '0' ? 'selected' : '' }}>Hidden</option>
                   </select>
                 </div>
               </div>

@@ -72,8 +72,8 @@
                           <th scope="col">Description</th>
                           <th scope="col">Sizes</th>
                           <th scope="col">Colors</th>
-                          <th scope="col">Category</th>
                           <th scope="col">Sub Category</th>
+                          <th scope="col">Category</th>
                           <th scope="col">Reviews</th>
                           <th scope="col">Is Featured?</th>
                           <th scope="col">Product Status</th>
@@ -111,8 +111,11 @@
                                     @endif
                                   </td>
                                   <td scope="col">C1 - circle with name, C2 - circle with name, C3 - circle with name, C4 - circle with name</td>
-                                  <td scope="col">{{ $product->category_name }}</td>
-                                  <td scope="col">{{ $product->sub_category_name }}</td>
+                                  @php
+                                    //   dd($product->productSubCategory);
+                                  @endphp
+                                  <td scope="col">{{ $product->productSubCategory->sub_category_name }}</td>
+                                  <td scope="col">{{ $product->productSubCategory->category->category_name }}</td>
                                   <td scope="col">
                                     <a href="/user/admin/product/id/reviews">
                                       24

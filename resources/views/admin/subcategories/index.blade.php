@@ -77,6 +77,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Sub Category Name</th>
                             <th scope="col">Parent Category</th>
+                            <th scope="col">Products</th>
                             <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
                         </tr>
@@ -87,6 +88,7 @@
                                 <td scope="col">{{ $loop->index+1 }}</td>
                                 <td scope="col">{{ $subCategory->sub_category_name }}</td>
                                 <td scope="col">{{ $subCategory->category->category_name }}</td>
+                                <td scope="col">{{ count($subCategory->products) }}</td>
                                 <td scope="col">
                                     @if ($subCategory->sub_category_id == env('OTHERS_SUB_CATEGORY_ID'))
                                         <button href="#" class="btn btn-sm btn-primary" disabled>Edit</button>

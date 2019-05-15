@@ -195,7 +195,7 @@ class ProductsController extends Controller
             : env('OTHERS_SUB_CATEGORY_ID');
 
         // Checking if the product already exists with same product name in the same sub category or not
-        if ($this->isEditedProductExists($request, $product)) {
+        if ($this->isEditedProductExists($validData , $product)) {
             // Redericting the page with error message
             return redirect('/user/admin/products')
                 ->with('error', 'Product already exists in the store!');
@@ -205,7 +205,7 @@ class ProductsController extends Controller
             $product->product_name = $validData['product_name'];
 
             // Saving the product in database.
-            $product->save();
+            $product->update();
             
             // Redericting the page with success message
             return redirect('/user/admin/products')->with('success', 'Product Updated Successfully');
@@ -288,7 +288,7 @@ class ProductsController extends Controller
      * @param Product $product
      * @return boolean true if the product with same name in the same category exists; false if it does not.
      */
-    private function isEditedProductExists($request, $product) {
+    private function isEditedProductExists($validData, $product) {
         return ($validData['product_name'] != $product->product_name)
             && $this->isProductExists($product);
     }
