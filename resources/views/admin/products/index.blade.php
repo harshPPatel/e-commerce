@@ -38,7 +38,7 @@
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
             <h5 class="card-header">Products</h5>
-            <div class="card-body">
+            < class="card-body">
               @if($errors->any())
                 @foreach($errors->all() as $error)
                     <p class="text-danger mt-1" role="alert">
@@ -108,12 +108,21 @@
                                         </a>
                                     @else 
                                         <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/sizes">Add Size</a>
-                                    @endif
+                                        @endif
+                                    </td>
+                                    <td scope="col">
+                                        @if(count($product->productColors))
+                                            @foreach ($product->productColors as $color)
+                                                <a href="/user/admin/products/{{ $product->product_id }}/colors">
+                                                    <div>
+                                                        {{ $color->color_name . ' ' }}
+                                                    </div>
+                                                </a>
+                                            @endforeach
+                                        @else
+                                            <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/colors">Add Color</a>
+                                        @endif
                                   </td>
-                                  <td scope="col">C1 - circle with name, C2 - circle with name, C3 - circle with name, C4 - circle with name</td>
-                                  @php
-                                    //   dd($product->productSubCategory);
-                                  @endphp
                                   <td scope="col">{{ $product->productSubCategory->sub_category_name }}</td>
                                   <td scope="col">{{ $product->productSubCategory->category->category_name }}</td>
                                   <td scope="col">
