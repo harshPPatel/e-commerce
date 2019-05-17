@@ -18,6 +18,7 @@ class CategoriesController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('isCategoryExists');
+        $this->middleware('isAdmin');
     }
 
     /**

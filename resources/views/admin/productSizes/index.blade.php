@@ -4,10 +4,6 @@
     {{ config('app.name') }} | Admin - Product Sizes
 @endsection
 
-@section('token')
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-@endsection
-
 @section('pageHeader')
     <!-- pageheader -->
     <div class="row">

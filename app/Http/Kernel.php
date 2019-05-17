@@ -60,11 +60,12 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'IsAdmin' => \App\Http\Middleware\IsAdmin::class,
+        'isAdmin' => \App\Http\Middleware\IsAdmin::class,
         'isCategoryExists' => \App\Http\Middleware\isCategoryExists::class,
         'isSubCategoryExists' => \App\Http\Middleware\isSubCategoryExists::class,
         'isProductExists' => \App\Http\Middleware\isProductExists::class,
         'isProductSizesExists' => \App\Http\Middleware\isProductSizesExists::class,
+        'isProductColorExists' => \App\Http\Middleware\isProductColorExists::class,
     ];
 
     /**

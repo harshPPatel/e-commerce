@@ -26,7 +26,7 @@ class Product extends Model
     public $incrementing = false;
 
     /**
-     * Estalbishes the has Many relation with ProductSize Modal
+     * Creates the has Many relation with ProductSize Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany Product Sizes related to the product
      */
@@ -35,11 +35,20 @@ class Product extends Model
     }
 
     /**
-     * Establishes the belongs to relation with SubCategory Modal
+     * Creates the belongs to relation with SubCategory Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsTo Sub category to which the product belongs to
      */
     public function productSubCategory() {
         return $this->belongsTo(SubCategory::class, 'sub_category_id');
+    }
+
+    /**
+     * Creates the has many relation with ProductColor Model
+     *
+     * @return hasMany - Colors belongs to the product
+     */
+    public function productColors() {
+        return $this->hasMany(ProductColor::class, 'product_id');
     }
 }

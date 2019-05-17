@@ -45,3 +45,6 @@ Route::resource('/user/admin/products', 'ProductsController');
 
 // Admin Product Sizes routes
 Route::resource('/user/admin/products/{product_id}/sizes', 'ProductSizesController');
+
+// Admin Product Colors Routes
+Route::resource('user/admin/products/{product_id}/colors', 'ProductColorsController');

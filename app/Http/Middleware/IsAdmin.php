@@ -22,12 +22,15 @@ class IsAdmin
         if(Auth::check()) {
             // Getting userRole from isAdmin column value
             $userRole = Auth::user()->isAdmin;
+
             // If user is admin, it will redirect him to admin dashboard.
-            if ($userRole == 1) {
-                return redirect('/home');
-//                return redirect('/user/admin/categories');
+            if ($userRole != 1) {
+                // giving Unauthorized Message
+                return abort(401);
             }
         }
+
+        // Returning next
         return $next($request);
     }
 }
