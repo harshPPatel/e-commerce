@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ProductColor;
+use App\Rules\Color;
+use Webpatser\Uuid\Uuid;
 
 class ProductColorsController extends Controller
 {
@@ -53,9 +55,39 @@ class ProductColorsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $product_id)
     {
-        //
+        // Valildating the data
+        $validData = $request->validate([
+            'product_color' => ['color', 'required'],
+            'color_name' => 'required|string'
+        ]);
+
+        // Creating new Product Color
+        $productColor = new ProductColor;
+
+        // Setting the values
+        $productColor->product_color_id = $this->createUniqueId();
+        $productColor->color_name = ucwords($validData['color_name']);
+        $productColor->product_color = $validData['product_color'];
+        $productColor->product_id = $product_id;
+
+        // checking if color for the product already exists or not
+        if ($this->isProductColorExists($productColor)) {
+
+            // Returning back with error message
+            return back()
+                ->with('error', 'Color for this product already exists!');
+        } 
+        else {
+            // Saving Color
+            $productColor->save();
+
+            // Redirecting back with success message
+            return back()
+                ->with('success', 'Color added for the product successfully!');
+        }
+
     }
 
     /**
@@ -101,5 +133,43 @@ class ProductColorsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Creates unique id for the primary key field of product color. It also checks to the dataase that if any other product color with the same unique Id exists, it regenrates the uniqueId.
+     *
+     * @return string uniqueId
+     */
+    private function createUniqueId() {
+        // Generating Unique ID
+        $uniqueId = Uuid::generate(4);
+
+        // Checking if unique id already exists or not. If it does than recreating the unique id.
+        if(ProductColor::find($uniqueId)) {
+            // Calling the function again to create new unique id
+            createUniqueId();
+        }
+
+        // Returning the unique Id
+        return $uniqueId;
+    }
+
+    /**
+     * Checks if the producColor with same name already exists in the database for requested product or not
+     *
+     * @return boolean true, if it exists in the database; false if it does not exists in the database
+     */
+    private function isProductColorExists($productColor) {
+        // Returning the value
+        return ProductColor
+        ::where([
+            ['product_id', $productColor->product_id],
+            ['product_color', 'LIKE', $productColor->product_color]
+        ])
+        ->orWhere([
+            ['product_id', $productColor->product_id],
+            ['color_name', 'LIKE', $productColor->color_name]
+        ])
+        ->exists();
     }
 }

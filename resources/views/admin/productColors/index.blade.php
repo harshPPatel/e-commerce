@@ -87,63 +87,65 @@
           <tbody>
             @if(count($productColors) > 0)
               @foreach ($productColors as $productColor)
-                <td scope="row">{{ $loop->index+1 }}</td>
-                <td>
-                  <div
-                    class="color-tag" 
-                    style="background-color: {{ $productColor->product_color }};
-                      height: 1.5rem;
-                      width: 4rem;
-                      margin: auto"
-                    title="{{ $productColor->product_color }}"></div>
-                </td>
-                <td>{{ $productColor->color_name }}</td>
-                <td>
-                  <a 
-                    href="/user/admin/products/{{ $product_id }}/colors/{{ $productColor->product_color_id }}/edit" 
-                    class="btn btn-sm btn-primary">
-                      Edit
-                  </a>
-                </td>
-                <td>
-                  <!-- Button trigger modal -->
-                  <button 
-                    type="button" 
-                    class="btn btn-danger btn-sm" 
-                    data-toggle="modal" 
-                    data-target="#deleteProductColorModal{{ $loop->index+1 }}">
-                      Delete
-                  </button>
-                  <!-- Delete category modal -->
-                  <div class="modal fade" id="deleteProductColorModal{{ $loop->index+1 }}" 
-                    tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Confirm Delete.</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body text-left">
-                          <p class="mtb--10 text-danger">
-                            Do you really want to delete the Product Color?
-                          </p>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                          <form 
-                            action="/user/admin/products/{{ $product_id }}/colors/{{ $productColor->product_color_id }}" 
-                            method="POST">
-                              @csrf
-                              <input type="hidden" name="_method" value="DELETE">
-                              <button type="submit" class="btn btn-danger">Delete</button>
-                          </form>
+                <tr>
+                  <td scope="row">{{ $loop->index+1 }}</td>
+                  <td>
+                    <div
+                      class="color-tag" 
+                      style="background-color: {{ $productColor->product_color }};
+                        height: 1.5rem;
+                        width: 4rem;
+                        margin: auto"
+                      title="{{ $productColor->product_color }}"></div>
+                  </td>
+                  <td>{{ $productColor->color_name }}</td>
+                  <td>
+                    <a 
+                      href="/user/admin/products/{{ $product_id }}/colors/{{ $productColor->product_color_id }}/edit" 
+                      class="btn btn-sm btn-primary">
+                        Edit
+                    </a>
+                  </td>
+                  <td>
+                    <!-- Button trigger modal -->
+                    <button 
+                      type="button" 
+                      class="btn btn-danger btn-sm" 
+                      data-toggle="modal" 
+                      data-target="#deleteProductColorModal{{ $loop->index+1 }}">
+                        Delete
+                    </button>
+                    <!-- Delete category modal -->
+                    <div class="modal fade" id="deleteProductColorModal{{ $loop->index+1 }}" 
+                      tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Confirm Delete.</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body text-left">
+                            <p class="mtb--10 text-danger">
+                              Do you really want to delete the Product Color?
+                            </p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                            <form 
+                              action="/user/admin/products/{{ $product_id }}/colors/{{ $productColor->product_color_id }}" 
+                              method="POST">
+                                @csrf
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
+                </tr>
               @endforeach
             @else
               <tr class="text-center">

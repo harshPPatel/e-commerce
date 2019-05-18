@@ -15,12 +15,12 @@
         placeholder="Type here..." 
         autocomplete="off" 
         class="form-control @error('color_name') is-invalid @enderror">
+        @error('color_name')
+          <div class="invalid-feedback">
+            <strong>{{ $message }}</strong>
+          </div>
+        @enderror
     </div>
-    @error('color_name')
-      <div class="invalid-feedback">
-        <strong>{{ message }}</strong>
-      </div>
-    @enderror
     <div class="form-group">
       <label for="productColor">Product Color:</label>
       <input 
@@ -30,9 +30,9 @@
         class="form-control @error('color_name') is-invalid @enderror"
         style="height: 3rem; max-width: 125px"
         value="#0e0c28">
-      @error('color_name')
+      @error('product_color')
         <div class="invalid-feedback">
-          <strong>{{ message }}</strong>
+          <strong>{{ $message }}</strong>
         </div>
       @enderror
     </div>

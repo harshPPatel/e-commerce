@@ -38,7 +38,7 @@
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
             <h5 class="card-header">Products</h5>
-            < class="card-body">
+            <div class="card-body">
               @if($errors->any())
                 @foreach($errors->all() as $error)
                     <p class="text-danger mt-1" role="alert">
@@ -47,14 +47,14 @@
                 @endforeach
               @endif
               @if(session('error'))
-                <div class="alert alert-danger alert-dismissable">
+                <div class="alert alert-danger alert-dismissible">
                   <p>
                     {{ session('error') }}
                   </p>
                 </div>
               @endif
               @if(session('success'))
-                <div class="alert alert-success alert-dismissable">
+                <div class="alert alert-success alert-dismissible">
                   <p>
                     {{ session('success') }}
                   </p>
