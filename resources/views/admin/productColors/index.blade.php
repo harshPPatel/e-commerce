@@ -1,7 +1,9 @@
 @extends('layouts.admin')
 
 {{-- Page Title --}}
-@section('title', `{{ config('app.name') }} | Admin - Product Colors`)
+@section('title')
+ {{ config('app.name') }} | Admin - Product Colors
+@endsection
 
 @section('pageHeader')
   <!-- page Header -->
