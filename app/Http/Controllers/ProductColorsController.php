@@ -164,12 +164,21 @@ class ProductColorsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param string $product_id - Id of the product
+     * @param string $color - Id of product color
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($product_id, $color)
     {
-        //
+        // fetching the color
+        $productColor = ProductColor::find($color);
+
+        // Deleting the color
+        $productColor->delete();
+
+        // Rederecting to the user
+        return back()
+            ->with('success', 'Product Color Deleted successfully');
     }
 
     /**
