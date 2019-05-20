@@ -107,9 +107,20 @@ class ProductColorsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($product_id, $color)
     {
-        //
+        // Fetching Product Colors for requested product 
+        $productColors = ProductColor::productColors($product_id)->get();
+
+        $productColor = ProductColor::find($color);
+
+        // Returning the view with variables
+        return view('admin.productColors.edit')
+            ->with([
+                'product_id' => $product_id,
+                'productColors' => $productColors,
+                'color' => $productColor,
+            ]);
     }
 
     /**
@@ -119,9 +130,35 @@ class ProductColorsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $product_id, $color)
     {
-        //
+        $validData = $request->validate([
+            'color_name' => ['required', 'string'],
+            'product_color' => ['required', 'color'],
+        ]);
+
+        // Fetching the product
+        $productColor = ProductColor::find($color);
+
+        // Updating the values
+        $productColor->color_name = ucwords($validData['color_name']);
+        $productColor->product_color = $validData['product_color'];
+
+        // Checking if edited color already exists in the database or not
+        if ($this->isProductColorExists($productColor)) {
+            // returning view with error message
+            return back()
+            ->with('error', 'Color with the same name already exists for the Product!');
+        } 
+        else {
+            // Updating the color
+            $productColor->update();
+            
+            // returning view with success message
+            return redirect("user/admin/products/{$product_id}/colors")
+                ->with('success', 'Product colors added successfully!');
+        }
+
     }
 
     /**
