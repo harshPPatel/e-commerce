@@ -51,4 +51,13 @@ class Product extends Model
     public function productColors() {
         return $this->hasMany(ProductColor::class, 'product_id');
     }
+
+    /**
+     * Creates the has many relation with ProductDatasheet Model
+     *
+     * @return hasMany - Datasheets belongs to the product
+     */
+    public function productDatasheets() {
+        return $this->hasMany(ProductDatasheet::class, 'product_id');
+    }
 }

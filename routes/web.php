@@ -48,3 +48,6 @@ Route::resource('/user/admin/products/{product_id}/sizes', 'ProductSizesControll
 
 // Admin Product Colors Routes
 Route::resource('user/admin/products/{product_id}/colors', 'ProductColorsController');
+
+// Admin Product Datasheets Routes
+Route::resource('user/admin/products/{product_id}/datasheets', 'ProductsDatasheetsController');
