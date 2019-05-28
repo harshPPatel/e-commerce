@@ -29,7 +29,10 @@ class ProductColorsController extends Controller
     public function index($product_id)
     {
         // Fetching Product Colors for requested product 
-        $productColors = ProductColor::productColors($product_id)->get();
+        $productColors = ProductColor::
+            productColors($product_id)
+            ->orderByDesc('created_at')
+            ->get();
 
         // Returning the view with variables
         return view('admin.productColors.index')
@@ -110,7 +113,10 @@ class ProductColorsController extends Controller
     public function edit($product_id, $color)
     {
         // Fetching Product Colors for requested product 
-        $productColors = ProductColor::productColors($product_id)->get();
+        $productColors = ProductColor::
+            productColors($product_id)
+            ->orderByDesc('created_at')
+            ->get();
 
         $productColor = ProductColor::find($color);
 

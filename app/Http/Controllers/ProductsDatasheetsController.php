@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\ProductDatasheet;
 
 class ProductsDatasheetsController extends Controller
 {
@@ -23,9 +24,20 @@ class ProductsDatasheetsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($product_id)
     {
-        return "Hello";
+        // Fetching all sizes for provided sizes
+        $productDatasheets = ProductDatasheet
+            ::productDatasheets($product_id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        // Returning the view with all sizes for defined 
+        return view('admin.productDatasheets.index')
+            ->with([
+                'productDatasheets' => $productDatasheets,
+                'product_id' => $product_id
+            ]);
     }
 
     /**
