@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'isProductSizesExists' => \App\Http\Middleware\isProductSizesExists::class,
         'isProductColorExists' => \App\Http\Middleware\isProductColorExists::class,
         'isProductDatasheetExists' => \App\Http\Middleware\isProductDatasheetExists::class,
+        'isProductImageExists' => \App\Http\Middleware\isProductImageExists::class,
     ];
 
     /**

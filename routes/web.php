@@ -51,3 +51,6 @@ Route::resource('user/admin/products/{product_id}/colors', 'ProductColorsControl
 
 // Admin Product Datasheets Routes
 Route::resource('user/admin/products/{product_id}/datasheets', 'ProductsDatasheetsController');
+
+// Admin Product Images Routes
+Route::resource('user/admin/products/{product_id}/images', 'ProductImagesController');

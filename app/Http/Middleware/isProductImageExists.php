@@ -4,9 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Product;
-use App\ProductDatasheet;
+use App\ProductImage;
 
-class isProductDatasheetExists
+class isProductImageExists
 {
     /**
      * Handle an incoming request.
@@ -30,20 +30,20 @@ class isProductDatasheetExists
                     ->with('error', 'Product does not exists!');
             } 
         } 
-        
-        if ($request->route('datasheet')) {
+
+        if ($request->route('image')) {
 
             // Saving product id from route
             $product_id = $request->route('product_id');
 
             // Saving color id from route
-            $product_datasheet_id = $request->route('datasheet');
+            $product_image_id = $request->route('image');
 
             // Checking if Product Exists or not.
-            if (!$this->isProductDatasheetExists($product_datasheet_id)) {
+            if (!$this->isProductImageExists($product_image_id)) {
                 // Redirecting to the products index page with error
-                return redirect("/user/admin/products/{$product_id}/datasheets")
-                    ->with('error', 'Product Datasheet does not exists!');
+                return redirect("/user/admin/products/{$product_id}/images")
+                    ->with('error', 'Product Image does not exists!');
             } 
         }
         
@@ -58,23 +58,17 @@ class isProductDatasheetExists
      * @return boolean true, if product exists in database; false otherwise
      */
     private function isProductExists($product_id) {
-        // Saving function Output
-        $output = false;
-
         // Finding product 
         $product = Product::find($product_id);
 
         // Checking if product is null or not
         if ($product == null) {
             // returning false
-            $output = false;
+            return false;
         } else {
             // returning true
-            $output = true;
+            return true;
         }
-
-        // Returning function Output
-        return $output;
     }
 
     /**
@@ -83,23 +77,18 @@ class isProductDatasheetExists
      * @param [type] $product_color_id
      * @return boolean
      */
-    private function isProductDatasheetExists($product_datasheet_id) {
-        // Saving function Output
-        $output = false;
+    private function isProductImageExists($product_image_id) {
 
         // Saving product color
-        $product_datasheet = ProductDatasheet::find($product_datasheet_id);
-        
+        $product_image = ProductImage::find($product_image_id);
+
         // Checking if product color is null or not
-        if ($product_datasheet == null) {
+        if ($product_image == null) {
             // Returning false
-            $output = false;
+            return false;
         } else {
             // Returning true
-            $output = true;
+            return true;
         }
-
-        // returning Output
-        return $output;
     }
 }

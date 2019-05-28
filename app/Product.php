@@ -60,4 +60,13 @@ class Product extends Model
     public function productDatasheets() {
         return $this->hasMany(ProductDatasheet::class, 'product_id');
     }
+
+    /**
+     * Creates the has many relation with ProductImage Model
+     *
+     * @return hasMany - Datasheets belongs to the product
+     */
+    public function ProductImages() {
+        return $this->hasMany(ProductImage::class, 'product_id');
+    }
 }

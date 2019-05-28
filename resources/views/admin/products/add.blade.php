@@ -123,7 +123,7 @@
                 <div class="col-md-4">
                   <label for="productVideo">Product Video</label>
                   <input type="file" class="form-control-file" id="productVideo" name="product_video">
-                  <p class="pt-2 pb-2">File should be less than 10 MB.</p>
+                  <p class="pt-2 pb-2">File should be less than 20 MB.</p>
                 </div>
               </div>
             </div>
