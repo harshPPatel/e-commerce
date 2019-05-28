@@ -2,7 +2,7 @@
 
 {{-- Page Title --}}
 @section('title')
- {{ config('app.name') }} | Admin - Product Colors
+ {{ config('app.name') }} | Admin - Product Datasheets
 @endsection
 
 @section('pageHeader')
@@ -10,9 +10,9 @@
   <div class="row">
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
       <div class="page-header">
-        <h2 class="pageheader-title">Product Colors</h2>
+        <h2 class="pageheader-title">Product Datasheets</h2>
         <p class="pageheader-text">
-          List of available Colors for the product in the store.
+          List of available Datasheets for the product in the store.
         </p>
         <div class="page-breadcrumb">
           <nav aria-label="breadcrumb">
@@ -24,7 +24,7 @@
                 <a href="/user/admin/products" class="breadcrumb-link">Products</a>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
-                Colors
+                Datasheets
               </li>
             </ol>
           </nav>
@@ -61,9 +61,9 @@
 
     <!-- Form Card -->
     <div class="card">
-      <h5 class="card-header">Edit Product Color</h5>
+      <h5 class="card-header">Edit Product Datasheet</h5>
       <div class="card-body">
-        @include('admin.productColors.editForm')
+        @include('admin.productDatasheets.editForm')
       </div>
     </div>
     <!-- End Form Card -->
@@ -74,33 +74,25 @@
   <!-- Categories List Table -->
   <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
     <div class="card">
-      <h5 class="card-header">Product Colors</h5>
+      <h5 class="card-header">Product Datasheets</h5>
       <div class="card-body">
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Color Name</th>
-              <th scope="col">Color</th>
+              <th scope="col">Specification Name</th>
+              <th scope="col">Value</th>
               <th scope="col">Edit</th>
               <th scope="col">Delete</th>
             </tr>
           </thead>
           <tbody>
-            @if(count($productColors) > 0)
-              @foreach ($productColors as $productColor)
+            @if(count($productDatasheets) > 0)
+              @foreach ($productDatasheets as $productDatasheet)
                 <tr>
                   <td scope="row">{{ $loop->index+1 }}</td>
-                  <td>
-                    <div
-                      class="color-tag" 
-                      style="background-color: {{ $productColor->product_color }};
-                        height: 1.5rem;
-                        width: 4rem;
-                        margin: auto"
-                      title="{{ $productColor->product_color }}"></div>
-                  </td>
-                  <td>{{ $productColor->color_name }}</td>
+                  <td>{{ $productDatasheet->specification_name }}</td>
+                  <td>{{ $productDatasheet->specification_value }}</td>
                   <td>
                     <button type="button" class="btn btn-sm btn-primary" disabled>Edit</button>
                   </td>
@@ -111,7 +103,7 @@
               @endforeach
             @else
               <tr class="text-center">
-                <td scope="row" colspan="5">No Colors Found!</td>
+                <td scope="row" colspan="5">No Datasheets Found!</td>
               </tr>
             @endif
           </tbody>

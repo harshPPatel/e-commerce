@@ -1,37 +1,39 @@
 <form 
-  action="/user/admin/products/{{ $product_id }}/colors/{{ $color->product_color_id }}" 
+  action="/user/admin/products/{{ $product_id }}/datasheets/{{ $productDatasheet->product_datasheet_id }}" 
   method="POST" 
   id="basicform" 
   data-parsley-validate="" 
   enctype="multipart/form-data">
     @csrf
     <div class="form-group">
-      <label for="productColorName">Product Color Name:</label>
+      <label for="productSpecificationName">Product Specification Name:</label>
       <input 
-        id="productColorName" 
+        id="productSpecificationName" 
         type="text" 
-        name="color_name" 
+        name="specification_name" 
         data-parsley-trigger="change" 
         placeholder="Type here..." 
         autocomplete="off" 
-        class="form-control @error('color_name') is-invalid @enderror"
-        value="{{ old('color_name') ? old('color_name') : $color->color_name }}">
-        @error('color_name')
+        class="form-control @error('specification_name') is-invalid @enderror"
+        value="{{ old('specification_name') ? old('specification_name') : $productDatasheet->specification_name }}">
+        @error('specification_name')
           <div class="invalid-feedback">
             <strong>{{ $message }}</strong>
           </div>
         @enderror
     </div>
     <div class="form-group">
-      <label for="productColor">Product Color:</label>
+      <label for="productSpecificationValue">Product Specification Value:</label>
       <input 
-        id="productColor" 
-        type="color" 
-        name="product_color"
-        class="form-control @error('color_name') is-invalid @enderror"
-        style="height: 3rem; max-width: 125px"
-        value="{{ old('product_color') ? old('product_color') : $color->product_color }}">
-      @error('product_color')
+        id="productSpecificationValue" 
+        type="text" 
+        name="specification_value" 
+        data-parsley-trigger="change" 
+        placeholder="Type here..." 
+        autocomplete="off" 
+        class="form-control @error('specification_value') is-invalid @enderror"
+        value="{{ old('specification_value') ? old('specification_value') : $productDatasheet->specification_value }}">
+      @error('specification_value')
         <div class="invalid-feedback">
           <strong>{{ $message }}</strong>
         </div>
@@ -43,7 +45,7 @@
           <input type="hidden" name="_method" value="PATCH">
           <button type="submit" class="btn btn-primary btn-space">Update</button>
           <a 
-            href="/user/admin/products/{{ $product_id }}/colors" 
+            href="/user/admin/products/{{ $product_id }}/datasheets" 
             class="btn btn-space btn-light">
               Cancel
           </a>

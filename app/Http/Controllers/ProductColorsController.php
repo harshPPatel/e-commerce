@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ProductColor;
-use App\Rules\Color;
 use Webpatser\Uuid\Uuid;
 
 class ProductColorsController extends Controller
