@@ -63,7 +63,7 @@
     <div class="card">
       <h5 class="card-header">Add Product Image</h5>
       <div class="card-body">
-        @include('admin.productDatasheets.addForm')
+        @include('admin.productImages.addForm')
       </div>
     </div>
     <!-- End Form Card -->

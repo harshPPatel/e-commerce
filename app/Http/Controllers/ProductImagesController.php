@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Product;
+use App\ProductImage;
 
 class ProductImagesController extends Controller
 {
@@ -21,11 +23,23 @@ class ProductImagesController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param String $product_id Id of the Product
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($product_id)
     {
-        //
+        // fetching all images for the product
+        $productImages = ProductImage
+            ::productImages($product_id)
+            ->orderBy('created_at')
+            ->get();
+
+        // Returning the view with all datasheets
+        return view('admin.productImages.index')
+            ->with([
+                'productImages' => $productImages,
+                'product_id' => $product_id
+            ]);
     }
 
     /**
