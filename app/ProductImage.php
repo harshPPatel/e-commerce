@@ -43,6 +43,6 @@ class ProductImage extends Model
      * @return belongsTo - product related to the Product Image
      */
     public function product() {
-        return $this->belongsTo(Product::class, 'product_image_id');
+        return $this->belongsTo('App\Product', 'product_id');
     }
 }

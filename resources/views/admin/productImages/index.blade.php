@@ -94,10 +94,10 @@
                   <td>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productImageModal{{ $loop->index+1 }}">
-                      <img src="storage/{{ $productImage->specification_name }}" alt="{{ $productImage->product->product_name }}" style="max-height: 2rem;">
+                      <img src="/storage/{{ $productImage->product_image }}" alt="{{ $productImage->product->product_name }}" style="max-height: 2rem;">
                     </button> 
                     <!-- Modal --> 
-                    <div class="modal fade" id="#productImageModal{{ $loop->index+1 }}" tabindex="-1" role="dialog" aria-labelledby="{{ $productImage->product->product_name }}" aria-hidden="true">
+                    <div class="modal fade" id="productImageModal{{ $loop->index+1 }}" tabindex="-1" role="dialog" aria-labelledby="{{ $productImage->product->product_name }}" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -107,7 +107,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <img src="storage/{{ $productImage->specification_name }}" alt="{{ $productImage->product->product_name }}" style="max-height: 25vh; width: 100%;">
+                            <img src="/storage/{{ $productImage->product_image }}" alt="{{ $productImage->product->product_name }}" style="max-height: 50vh; width: auto;">
                           </div>
                         </div>
                       </div>

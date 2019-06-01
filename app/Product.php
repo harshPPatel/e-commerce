@@ -67,6 +67,6 @@ class Product extends Model
      * @return hasMany - Datasheets belongs to the product
      */
     public function ProductImages() {
-        return $this->hasMany(ProductImage::class, 'product_id');
+        return $this->hasMany('App\ProductImage', 'product_id');
     }
 }
