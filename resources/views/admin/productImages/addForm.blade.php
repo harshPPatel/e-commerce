@@ -3,6 +3,7 @@
   method="POST" 
   id="basicform" 
   data-parsley-validate="" 
+  role="form"
   enctype="multipart/form-data">
     @csrf
     <div class="form-group">
@@ -14,6 +15,7 @@
         data-parsley-trigger="change" 
         placeholder="Type here..." 
         autocomplete="off" 
+        accept="image/*"
         class="form-control-file @error('product_image') is-invalid @enderror">
       @error('product_image')
         <div class="invalid-feedback">

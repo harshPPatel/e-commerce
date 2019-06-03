@@ -63,6 +63,7 @@
     <div class="card">
       <h5 class="card-header">Add Product Image</h5>
       <div class="card-body">
+        <p class="text-danger">Only Images are allowed. Other files will be ignored!</p>
         @include('admin.productImages.addForm')
       </div>
     </div>

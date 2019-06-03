@@ -63,7 +63,7 @@ class ProductImagesController extends Controller
     {
         // Validate the request
         $validData = $request->validate([
-            'product_image' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'product_image' => 'required|image|max:2048',
             'is_featured' => 'required|boolean',
         ]);
 
