@@ -63,7 +63,7 @@
     <div class="card">
       <h5 class="card-header">Add Product Image</h5>
       <div class="card-body">
-        @include('admin.productImages.addForm')
+        @include('admin.productImages.editForm')
       </div>
     </div>
     <!-- End Form Card -->
@@ -91,7 +91,26 @@
                 <tr>
                   <td scope="row">{{ $loop->index+1 }}</td>
                   <td>
-                    <img src="storage/{{ $productImage->specification_name }}" alt="{{ $productImage->product->product_name }}" style="max-height: 2rem;">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productImageModal{{ $loop->index+1 }}">
+                      <img src="/storage/productImages/{{ $productImage->product_image }}" alt="{{ $productImage->product->product_name }}" style="max-height: 2rem;">
+                    </button> 
+                    <!-- Modal --> 
+                    <div class="modal fade" id="productImageModal{{ $loop->index+1 }}" tabindex="-1" role="dialog" aria-labelledby="{{ $productImage->product->product_name }}" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">{{ $productImage->product->product_name }}'s Image</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <img src="/storage/productImages/{{ $productImage->product_image }}" alt="{{ $productImage->product->product_name }}" style="max-height: 50vh; width: auto;">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </td>
                   <td>
                     {{ $productImage->is_featured == 1 ? 'Yes' : 'No' }}

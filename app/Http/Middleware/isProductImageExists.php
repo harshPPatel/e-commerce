@@ -17,32 +17,24 @@ class isProductImageExists
      */
     public function handle($request, Closure $next)
     {
-        // Cheking if product parameter exists in route
-        if ($request->route('product_id')) {
+        // Saving product id from route
+        $product_id = $request->route('product_id');
 
-            // Saving product id from route
-            $product_id = $request->route('product_id');
-
-            // Checking if Product Exists or not.
-            if (!$this->isProductExists($product_id)) {
-                // Redirecting to the products index page with error
-                return redirect("/user/admin/products")
-                    ->with('error', 'Product does not exists!');
-            } 
+        // Checking if Product Exists or not.
+        if (!$this->isProductExists($product_id)) {
+            // Redirecting to the products index page with error
+            return redirect("/user/admin/products")
+                ->with('error', 'Product does not exists!');
         } 
 
-        if ($request->route('image')) {
-
-            // Saving product id from route
-            $product_id = $request->route('product_id');
-
+        if ($request->has('image')) {
             // Saving color id from route
             $product_image_id = $request->route('image');
 
             // Checking if Product Exists or not.
             if (!$this->isProductImageExists($product_image_id)) {
                 // Redirecting to the products index page with error
-                return redirect("/user/admin/products/{$product_id}/images")
+                return redirect("/user/admin/products/". $product_id. "/images")
                     ->with('error', 'Product Image does not exists!');
             } 
         }
@@ -58,17 +50,22 @@ class isProductImageExists
      * @return boolean true, if product exists in database; false otherwise
      */
     private function isProductExists($product_id) {
+        // Saving output result
+        $output = false; 
+
         // Finding product 
         $product = Product::find($product_id);
 
         // Checking if product is null or not
         if ($product == null) {
             // returning false
-            return false;
+            $output =  false;
         } else {
             // returning true
-            return true;
+            $output =  true;
         }
+        //returing the value
+        return $output;
     }
 
     /**
@@ -78,6 +75,8 @@ class isProductImageExists
      * @return boolean
      */
     private function isProductImageExists($product_image_id) {
+        // Saving output result
+        $output = false;
 
         // Saving product color
         $product_image = ProductImage::find($product_image_id);
@@ -85,10 +84,13 @@ class isProductImageExists
         // Checking if product color is null or not
         if ($product_image == null) {
             // Returning false
-            return false;
+            $output = false;
         } else {
             // Returning true
-            return true;
+            $output = true;
         }
+        
+        // returning the output value
+        return $output;
     }
 }

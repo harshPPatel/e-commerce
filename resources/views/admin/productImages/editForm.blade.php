@@ -22,7 +22,7 @@
       @enderror
     </div>
     <div class="form-group">
-      <label for="isFeatured">Is Feaetured?</label>
+      <label for="isFeatured">Is Featured?</label>
       <select name="is_featured" id="isFeatured" 
         class="form-control @error('is_featured') is-invalid @enderror">
         <option value="1" {{ $productImage->is_featured == 1 ? 'selected' : '' }}>Yes</option>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\ProductImage;
 use Webpatser\Uuid\Uuid;
+use Storage;
 
 class ProductImagesController extends Controller
 {
@@ -32,7 +33,7 @@ class ProductImagesController extends Controller
         // fetching all images for the product
         $productImages = ProductImage
             ::productImages($product_id)
-            ->orderBy('created_at')
+            ->orderByDesc('created_at')
             ->get();
 
         // Returning the view with all datasheets
@@ -67,21 +68,12 @@ class ProductImagesController extends Controller
             'is_featured' => 'required|boolean',
         ]);
 
-        // Finding the Product
-        $product = Product::find($product_id);
-        // Setting image name
-        $imageExtension = request()->product_image->getClientOriginalExtension();
-        $imageName = time() . "_$product->product_name.$imageExtension";
-        // Saving Image to server
-        request('product_image')->storeAs('productImages', $imageName, 'public');
-
         // Creating new ProductImage
         $productImage = new ProductImage;
         $productImage->product_image_id = $this->createUniqueId();
-        $productImage->product_image = 'productImages/' . $imageName;
         $productImage->is_featured = $validData['is_featured'];
         $productImage->product_id = $product_id;
-
+        
         // Checking if teh Product Image already exists in the database or not
         if ($this->isProductImageExists($productImage)) {
             // returning back with error message
@@ -89,6 +81,16 @@ class ProductImagesController extends Controller
             ->with('error', 'Product Image already exists');
         } 
         else {
+            // Finding the Product
+            $product = Product::find($product_id);
+            // Setting image name
+            $imageExtension = request()->product_image->getClientOriginalExtension();
+            $imageName = time() . "_$product->product_name.$imageExtension";
+            // Saving Image to server
+            request('product_image')->storeAs('public/productImages', $imageName);
+
+            // Saving image name to database
+            $productImage->product_image = $imageName;
             // Saving product image
             $productImage->save();
 
@@ -96,7 +98,6 @@ class ProductImagesController extends Controller
             return back()
                 ->with('success', 'Product Image added to the database successfully.');
         }
-
     }
 
     /**
@@ -116,9 +117,21 @@ class ProductImagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($product_id, ProductImage $image)
     {
-        //
+        // Fetching Product Images for requested product 
+        $productImages = ProductImage
+            ::productImages($product_id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        // Returning the view with variables
+        return view('admin.productImages.edit')
+            ->with([
+                'product_id' => $product_id,
+                'productImages' => $productImages,
+                'productImage' => $image,
+            ]);
     }
 
     /**
@@ -128,9 +141,59 @@ class ProductImagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $product_id, $image)
     {
-        //
+        // Validate Data
+        $validData = $request->validate([
+            'product_image' => 'image|nullable|max:2048',
+            'is_featured' => 'required|boolean',
+        ]);
+
+        // Creating new ProductImage
+        $productImage = ProductImage:: find($image);
+        $productImage->is_featured = $validData['is_featured'];
+
+        // Checking if teh Product Image already exists in the database or not
+        if ($this->isProductImageExists($productImage)) {
+            // returning back with error message
+            return back()
+                ->with('error', 'Product Image already exists');
+        } 
+        else if ($this->isFeaturedProductImageExists($productImage)) {
+            // returning back with error message
+            return back()
+                ->with('error', 'Featured image for the product already exists!');
+        }
+        else {
+            // Checking if new file is added or not
+            if ($request->has('product_image')){
+                // saving old name to delete image
+                $oldImagePath = $productImage->product_image;
+
+                // Finding the Product
+                $product = Product::find($product_id);
+                // Setting image name
+                $imageExtension = request()->product_image->getClientOriginalExtension();
+                $imageName = time() . "_$product->product_name.$imageExtension";
+                // Saving Image to server
+                request('product_image')->storeAs('productImages', $imageName, 'public');
+    
+                // Setting productImage's product_image
+                $productImage->product_image = $imageName;
+            }
+            
+            // Saving product image
+            $productImage->update();
+
+            // Deleting old file if file is uploaded
+            if ($oldImagePath) {
+                Storage::delete('public/productImages/'.$oldImagePath);
+            }
+
+            // Returning back with success message
+            return redirect("/user/admin/products/$product_id/images")
+                ->with('success', 'Product Image added to the database successfully.');
+        }
     }
 
     /**
@@ -172,9 +235,34 @@ class ProductImagesController extends Controller
         // Returning the value
         return ProductImage
             ::where([
+                ['product_image_id', '<>', $productImage->product_image_id],
                 ['product_id', $productImage->product_id],
                 ['product_image', '=', $productImage->product_image],
             ])
             ->exists();
+    }
+
+    /**
+     * Checks if isFeaeturedImage Already exists or not for the products.
+     *
+     * @param ProductImage New or Updated product image row
+     * @return boolean true if it exists; flase otherwise
+     */
+    private function isFeaturedProductImageExists($productImage)
+    {
+        // Checks if $productImage is featured image or not
+        if ($productImage->is_featured == 1){
+            // Returning value
+            return ProductImage
+                ::where([
+                    ['product_image_id', '<>', $productImage->product_image_id],
+                    ['product_id', $productImage->product_id],
+                    ['is_featured', 1],
+                ])
+                ->exists();
+        }
+        else {
+            return false;
+        }
     }
 }

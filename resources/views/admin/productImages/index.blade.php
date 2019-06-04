@@ -63,7 +63,7 @@
     <div class="card">
       <h5 class="card-header">Add Product Image</h5>
       <div class="card-body">
-        <p class="text-danger">Only Images are allowed. Other files will be ignored!</p>
+        <h4>Only Images are allowed. Other files will be ignored!</h4>
         @include('admin.productImages.addForm')
       </div>
     </div>
@@ -95,7 +95,7 @@
                   <td>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productImageModal{{ $loop->index+1 }}">
-                      <img src="/storage/{{ $productImage->product_image }}" alt="{{ $productImage->product->product_name }}" style="max-height: 2rem;">
+                      <img src="/storage/productImages/{{ $productImage->product_image }}" alt="{{ $productImage->product->product_name }}" style="max-height: 2rem;">
                     </button> 
                     <!-- Modal --> 
                     <div class="modal fade" id="productImageModal{{ $loop->index+1 }}" tabindex="-1" role="dialog" aria-labelledby="{{ $productImage->product->product_name }}" aria-hidden="true">
@@ -108,7 +108,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <img src="/storage/{{ $productImage->product_image }}" alt="{{ $productImage->product->product_name }}" style="max-height: 50vh; width: auto;">
+                            <img src="/storage/productImages/{{ $productImage->product_image }}" alt="{{ $productImage->product->product_name }}" style="max-height: 50vh; width: auto;">
                           </div>
                         </div>
                       </div>
