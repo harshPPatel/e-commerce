@@ -202,9 +202,23 @@ class ProductImagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($product_id, $image)
     {
-        //
+        // Finding the image
+        $productImage = ProductImage::find($image);
+
+        // Saving old image path
+        $oldImagePath = $productImage->product_image;
+
+        // Deleting the image
+        $productImage->delete();
+
+        // Deleting the image from storage
+        Storage::delete('public/productImages/'.$oldImagePath);
+
+        // Redirecting back with error message
+        return back()
+            ->with('success', 'Product Deleted Successfully!');
     }
 
     /**
