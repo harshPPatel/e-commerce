@@ -72,6 +72,8 @@
                           <th scope="col">Description</th>
                           <th scope="col">Sizes</th>
                           <th scope="col">Colors</th>
+                          <th scope="col">Datasheets</th>
+                          <th scope="col">Images</th>
                           <th scope="col">Sub Category</th>
                           <th scope="col">Category</th>
                           <th scope="col">Reviews</th>
@@ -91,9 +93,6 @@
                                   <td scope="col">{{ $product->product_stock }}</td>
                                   <td scope="col">{{ $product->product_description }}</td>
                                   <td scope="col">
-                                      @php
-                                        // dd($product->productSizes) ;  
-                                      @endphp
                                     @if (count($product->productSizes) > 0)
                                         <a href="/user/admin/products/{{ $product->product_id }}/sizes">
                                             <div>
@@ -108,20 +107,42 @@
                                         </a>
                                     @else 
                                         <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/sizes">Add Size</a>
-                                        @endif
-                                    </td>
-                                    <td scope="col">
-                                        @if(count($product->productColors))
-                                            @foreach ($product->productColors as $color)
-                                                <a href="/user/admin/products/{{ $product->product_id }}/colors">
-                                                    <div>
-                                                        {{ $color->color_name . ' ' }}
-                                                    </div>
-                                                </a>
-                                            @endforeach
-                                        @else
-                                            <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/colors">Add Color</a>
-                                        @endif
+                                    @endif
+                                  </td>
+                                  <td scope="col">
+                                    @if(count($product->productColors) > 0)
+                                        @foreach ($product->productColors as $color)
+                                            <a href="/user/admin/products/{{ $product->product_id }}/colors">
+                                                <div>
+                                                    {{ $color->color_name . ' ' }}
+                                                </div>
+                                            </a>
+                                        @endforeach
+                                    @else
+                                        <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/colors">Add Color</a>
+                                    @endif
+                                  </td>
+                                  <td scope="col" class="text-center">
+                                    @if(count($product->productDatasheets) > 0)
+                                        <a href="/user/admin/products/{{ $product->product_id }}/datasheets">
+                                            <div>
+                                                {{ count($product->productDatasheets) }}
+                                            </div>
+                                        </a>
+                                    @else
+                                        <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/datasheets">Add Datasheet</a>
+                                    @endif
+                                  </td>
+                                  <td scope="col" class="text-center">
+                                    @if(count($product->productImages) > 0)
+                                        <a href="/user/admin/products/{{ $product->product_id }}/images">
+                                            <div>
+                                                {{ count($product->productImages) }}
+                                            </div>
+                                        </a>
+                                    @else
+                                        <a class="btn btn-link" href="/user/admin/products/{{ $product->product_id }}/images">Add Image</a>
+                                    @endif
                                   </td>
                                   <td scope="col">{{ $product->productSubCategory->sub_category_name }}</td>
                                   <td scope="col">{{ $product->productSubCategory->category->category_name }}</td>
