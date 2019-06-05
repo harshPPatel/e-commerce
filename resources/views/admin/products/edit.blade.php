@@ -128,7 +128,7 @@
               <div class="row">
                 <div class="col-md-4">
                   <label for="productVideo">Product Video</label>
-                  <input type="file" class="form-control-file" id="productVideo" name="product_video">
+                  <input type="url" class="form-control" id="productVideo" name="product_video">
                   <p class="pt-2 pb-2">File should be less than 10 MB.</p>
                 </div>
               </div>

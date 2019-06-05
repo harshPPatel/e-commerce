@@ -279,4 +279,18 @@ class ProductImagesController extends Controller
             return false;
         }
     }
+
+    /**
+     * Checks if product image upload limit is reached or not
+     *
+     * @param String $product_id - Id of the Product
+     * @return boolean true if limit is reached; false otehrwise
+     */
+    private function isLimitReached($product_id) {
+        if (ProductImage::productImages($product_id)->get()->count() <= 7) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

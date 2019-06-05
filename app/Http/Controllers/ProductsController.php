@@ -77,7 +77,7 @@ class ProductsController extends Controller
             'product_stock' => ['required', 'numeric'],
             'is_featured' => ['required', 'boolean'],
             'is_available' => ['required', 'boolean'],
-            'product_video' => ['mimetypes:video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/s-ms-wmv,video/mpeg,video/avi'],
+            'product_video' => ['nullable', 'url'],
             'sub_category_id' => ['required', 'string'],
         ]);
 
@@ -172,7 +172,7 @@ class ProductsController extends Controller
             'product_stock' => ['required', 'numeric'],
             'is_featured' => ['required', 'boolean'],
             'is_available' => ['required', 'boolean'],
-            'product_video' => ['mimetypes:video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/s-ms-wmv,video/mpeg,video/avi'],
+            'product_video' => ['nullable', 'url'],
             'sub_category_id' => ['required', 'string'],
         ]);
 
