@@ -43,6 +43,10 @@ class Product extends Model
         return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
+    public function productCategory() {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
     /**
      * Creates the has many relation with ProductColor Model
      *
@@ -66,7 +70,14 @@ class Product extends Model
      *
      * @return hasMany - Datasheets belongs to the product
      */
-    public function ProductImages() {
+    public function productImages() {
         return $this->hasMany('App\ProductImage', 'product_id');
+    }
+
+    public function productFeaturedImage() {
+        return ProductImage::where([
+            ['product_id', $this->product_id],
+            ['is_featured', 1],
+        ])->first();
     }
 }

@@ -1,7 +1,7 @@
 <!-- QUICKVIEW PRODUCT -->
-<div id="quickview-wrapper">
+<div class="quickview-wrapper">
     <!-- Modal -->
-    <div class="modal fade" id="productModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="{{ $product->product_id }}" tabindex="-1" role="dialog">
         <div class="modal-dialog modal__container" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,13 +11,13 @@
                     <div class="modal-product">
                         <!-- Start product images -->
                         <div class="product-images">
-                            <div class="main-image images">
-                                <img alt="big images" src="images/product/big-img/1.jpg">
+                            <div class="main-image images" style="height: 100%; text-align: center;">
+                                <img alt="big images" style="height: 100%" src="/storage/productImages/{{$product->productFeaturedImage()->product_image}}">
                             </div>
                         </div>
                         <!-- end product images -->
                         <div class="product-info">
-                            <h1>Simple Fabric Bags</h1>
+                            <h2>{{ $product->product_name }}</h2>
                             <div class="rating__and__review">
                                 <ul class="rating">
                                     <li><span class="ti-star"></span></li>
@@ -32,32 +32,36 @@
                             </div>
                             <div class="price-box-3">
                                 <div class="s-price-box">
-                                    <span class="new-price">$17.20</span>
-                                    <span class="old-price">$45.00</span>
+                                    <span class="new-price">${{$product->product_price}}</span>
+                                    <span class="old-price">{{ $product->product_old_price ? '$' . $product->product_old_price : '' }}</span>
                                 </div>
                             </div>
                             <div class="quick-desc">
-                                Designed for simplicity and made from high quality materials. Its sleek geometry and material combinations creates a modern look.
+                                {{ $product->product_description }}
                             </div>
-                            <div class="select__color">
-                                <h2>Select color</h2>
-                                <ul class="color__list">
-                                    <li class="red"><a title="Red" href="#">Red</a></li>
-                                    <li class="gold"><a title="Gold" href="#">Gold</a></li>
-                                    <li class="orange"><a title="Orange" href="#">Orange</a></li>
-                                    <li class="orange"><a title="Orange" href="#">Orange</a></li>
-                                </ul>
-                            </div>
-                            <div class="select__size">
-                                <h2>Select size</h2>
-                                <ul class="color__list">
-                                    <li class="l__size"><a title="L" href="#">L</a></li>
-                                    <li class="m__size"><a title="M" href="#">M</a></li>
-                                    <li class="s__size"><a title="S" href="#">S</a></li>
-                                    <li class="xl__size"><a title="XL" href="#">XL</a></li>
-                                    <li class="xxl__size"><a title="XXL" href="#">XXL</a></li>
-                                </ul>
-                            </div>
+
+                            @if( $modalSizes )
+                                <div class="select__color">
+                                    <h2>Select color</h2>
+                                    <ul class="color__list">
+                                        @foreach ($product->productColors as $color)
+                                            <li>
+                                                <a style="background: {{$color->product_color}}; border: 1px solid rgba(0,0,0,0.2)" title="{{$color->color_name}}" href="#"></a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <div class="select__size">
+                                    <h2>Select size</h2>
+                                    <ul class="color__list">
+                                        @foreach ($product->productSizes as $size)
+                                            <li>
+                                                <a title="{{ $size->product_size }}" href="#">{{ $size->product_size }}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="social-sharing">
                                 <div class="widget widget_socialsharing_widget">
                                     <h3 class="widget-title-modal">Share this product</h3>

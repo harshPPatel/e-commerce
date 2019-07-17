@@ -143,6 +143,7 @@ class ProductImagesController extends Controller
      */
     public function update(Request $request, $product_id, $image)
     {
+        $oldImagePath = "";
         // Validate Data
         $validData = $request->validate([
             'product_image' => 'image|nullable|max:2048',

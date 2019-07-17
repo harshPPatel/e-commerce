@@ -31,7 +31,7 @@ class ProductsController extends Controller
     {
         // Fetching all products in descending order of the time they were created
         // $products = Product::orderByDesc('created_at')->get();
-        $products = Product::all();
+        $products = Product::orderBy('created_at', 'desc')->get();
         
         // Returning the view with variables
         return view('admin.products.index')
@@ -93,13 +93,15 @@ class ProductsController extends Controller
         $product->is_featured = $validData['is_featured'];
         $product->is_available = $validData['is_available'];
         $product->product_video = $request->product_video
-            ? $validData['product_video'] 
-            : null;
-
+        ? $validData['product_video'] 
+        : null;
+        
         // Cehcking if provided sub category exists or not. If not than sets by default to Other Sub Category
         $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id) 
             ? $request->sub_category_id 
             : env('OTHERS_SUB_CATEGORY_ID');
+        $subCategory = SubCategory::where('sub_category_id', $product->sub_category_id)->get();
+        $product->product_category_id = $subCategory[0]->category_id;        
 
         // Cheking if product with same name exists or not
         if($this->isProductExists($product)) {
@@ -180,7 +182,7 @@ class ProductsController extends Controller
         $product = Product::find($id);
 
         // Setting values of Product
-        $product->product_old_price = $this->getProductOldPrice($validData, $product);
+        $product->product_old_price = $this->getProductOldPrice($request, $validData, $product);
         $product->product_price = $validData['product_price'];
         $product->product_description = $validData['product_description'];
         $product->product_stock = $validData['product_stock'];
@@ -194,6 +196,9 @@ class ProductsController extends Controller
         $product->sub_category_id = $this->isSubCategoryExists($request->sub_category_id) 
             ? $request->sub_category_id 
             : env('OTHERS_SUB_CATEGORY_ID');
+
+        $subCategory = SubCategory::where('sub_category_id', $product->sub_category_id)->get();
+            $product->product_category_id = $subCategory[0]->category_id;    
 
         // Checking if the product already exists with same product name in the same sub category or not
         if ($this->isEditedProductExists($validData , $product)) {
@@ -301,12 +306,11 @@ class ProductsController extends Controller
      * @param Product $product - product created after validation
      * @return string value of old price for the product
      */
-    private function getProductOldPrice($validData, $product) {
+    private function getProductOldPrice($request, $validData, $product) {
         return (
             ($validData['product_price'] != $product->product_price)
-            && ($request->product_price > $product->product_price) 
-            && ($request->product_price > $product->product_old_price)) 
+            && ($request->product_price < $product->product_price)) 
         ? $product->product_price 
-        : '0';
+        : null;
     }
 }

@@ -36,6 +36,12 @@
     <!-- basic table -->
     <!-- ============================================================== -->
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card" style="max-width: 250px; width: 100%;">
+            <h5 class="card-header">Quick Suggestions</h5>
+            <div class="card-body">
+                <a href="/user/admin/products/create" class="btn btn-primary">Add Product</a>
+            </div>
+        </div>
         <div class="card">
             <h5 class="card-header">Products</h5>
             <div class="card-body">
@@ -206,12 +212,6 @@
                   <h4>No Products Found!</h4>
                   <a href="/user/admin/products/create" class="btn btn-primary">Add Product Now!</a>
               @endif
-            </div>
-        </div>
-        <div class="card" style="max-width: 250px; width: 100%;">
-            <h5 class="card-header">Quick Suggestions</h5>
-            <div class="card-body">
-                <a href="/user/admin/products/create" class="btn btn-primary">Add Product</a>
             </div>
         </div>
     </div>
